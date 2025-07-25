@@ -595,6 +595,13 @@ section:nth-child(even) {
   font-size: var(--font-size-xs);
 }
 
+.timeline-content p {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: 1.5;
+  margin: 0;
+}
+
 /* Timeline details displayed on the timeline */
 .timeline-details {
   margin-top: var(--spacing-lg);
