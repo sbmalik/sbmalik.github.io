@@ -198,9 +198,25 @@
     .built__k{grid-column:1/-1}
   }
   @media print{.tip{display:none}}
+  /* backdrop: index_claude's procedural silicon, lit from the top right, fixed behind the page (via index_9) */
+  .media{position:fixed;inset:0;z-index:0;pointer-events:none;background:var(--bg);overflow:hidden}
+  .media__fb{position:absolute;inset:0;background:radial-gradient(120% 80% at 78% 38%,#1b1d22 0%,#0e0f12 40%,#0e0f12 72%)}
+  .media__fb::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(255,255,255,.025) 0 1px,transparent 1px 7px);
+    -webkit-mask-image:linear-gradient(90deg,transparent 45%,#000 75%);mask-image:linear-gradient(90deg,transparent 45%,#000 75%)}
+  .media canvas{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;transition:opacity 1.4s cubic-bezier(.4,0,.2,1)}
+  .media canvas.is-on{opacity:.76}
+  /* left and bottom fades keep the text readable */
+  .fade{position:fixed;inset:0;z-index:1;pointer-events:none;background:
+    linear-gradient(90deg,rgba(14,15,18,.78) 0%,rgba(14,15,18,.5) 26%,rgba(14,15,18,.18) 50%,transparent 76%),
+    linear-gradient(180deg,rgba(14,15,18,.34) 0%,rgba(14,15,18,.06) 16%,rgba(14,15,18,.2) 40%,rgba(14,15,18,.72) 62%,rgba(14,15,18,.94) 80%,#0e0f12 100%)}
+  .page{position:relative;z-index:2}
+  @media (prefers-reduced-motion:reduce){.media canvas{transition:none}}
+  @media print{.media,.fade{display:none}}
 </style>
 </head>
 <body>
+<div class="media" data-scene="hero" aria-hidden="true"><div class="media__fb"></div></div>
+<div class="fade" aria-hidden="true"></div>
 <div class="page">
 
   <header class="top">
@@ -356,5 +372,340 @@
   </footer>
 
 </div>
+<script>
+/* one rAF loop for the backdrop (from index_claude via index_9) */
+(() => {
+const clamp01 = x => x < 0 ? 0 : x > 1 ? 1 : x;
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const coarse = matchMedia('(pointer: coarse)').matches;
+const finePtr = matchMedia('(hover: hover) and (pointer: fine)').matches;
+const mqDesk = matchMedia('(min-width: 981px)');
+const ticker = {
+  fns: new Set(), raf: 0, last: 0, inLoop: false,
+  add(fn) { this.fns.add(fn); this.start(); },
+  remove(fn) { this.fns.delete(fn); },
+  start() { if (this.raf || this.inLoop || document.hidden || !this.fns.size) return; this.last = performance.now(); this.raf = requestAnimationFrame(this.loop); },
+  loop(now) {
+    ticker.inLoop = true;
+    const dt = Math.min(0.1, Math.max(0, (now - ticker.last) / 1000));
+    ticker.last = now;
+    for (const f of Array.from(ticker.fns)) { if (f(now, dt) === false) ticker.fns.delete(f); }
+    ticker.inLoop = false;
+    ticker.raf = (ticker.fns.size && !document.hidden) ? requestAnimationFrame(ticker.loop) : 0;
+  }
+};
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) { cancelAnimationFrame(ticker.raf); ticker.raf = 0; } else ticker.start();
+});
+window.__site = { ticker, reduced, coarse, finePtr, mqDesk, clamp01 };
+})();
+</script>
+<script>
+/* ---------------- backdrop: Fig. 01, macro silicon (index_claude) ---------------- */
+(() => {
+'use strict';
+const site = window.__site; if (!site) return;
+const { ticker, reduced, coarse, finePtr, mqDesk, clamp01 } = site;
+const weak = !!((navigator.connection && navigator.connection.saveData) || (coarse && (navigator.hardwareConcurrency || 8) <= 4));
+const stillAmbient = reduced || weak;
+
+const PREC = `#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
+precision mediump float;
+#endif
+`;
+const COMMON = `
+uniform vec2 uRes; uniform float uTime; uniform float uDpr;
+float hash12(vec2 p){ vec3 p3=fract(vec3(p.xyx)*.1031); p3+=dot(p3,p3.yzx+33.33); return fract((p3.x+p3.y)*p3.z); }
+float noise2(vec2 p){ vec2 i=floor(p), f=fract(p); vec2 u=f*f*(3.-2.*f);
+  return mix(mix(hash12(i),hash12(i+vec2(1.,0.)),u.x), mix(hash12(i+vec2(0.,1.)),hash12(i+vec2(1.,1.)),u.x), u.y); }
+float fbm(vec2 p){ float a=.5, s=0.; for(int i=0;i<5;i++){ s+=a*noise2(p); p=p*2.03+vec2(1.7,9.2); a*=.5; } return s; }
+vec3 aces(vec3 x){ return clamp((x*(2.51*x+.03))/(x*(2.43*x+.59)+.14), 0., 1.); }
+float vignette(vec2 uv){ return smoothstep(1.25, .35, length(uv*vec2(1.,1.15))); }
+vec3 rotX(vec3 v, float a){ float c=cos(a), s=sin(a); return vec3(v.x, v.y*c - v.z*s, v.y*s + v.z*c); }
+vec3 rotY(vec3 v, float a){ float c=cos(a), s=sin(a); return vec3(v.x*c + v.z*s, v.y, -v.x*s + v.z*c); }
+float boxc(float x, float h, float B){ B=max(B,1e-5); return clamp((min(x+.5*B,h)-max(x-.5*B,-h))/B, 0., 1.); }
+vec3 finish(vec3 col, float exposure, float vigAmt){
+  vec2 fc = gl_FragCoord.xy; vec2 uv = fc/uRes*2.-1.;
+  col = aces(col*exposure);
+  col *= mix(1., vignette(uv), vigAmt);
+  col = pow(col, vec3(1./2.2));
+  float l = dot(col, vec3(.299,.587,.114));
+  float g = hash12(fc + fract(uTime*.6173)*vec2(97.31, 41.97)) - .5;
+  col += g*(.010 + .035*sqrt(l));
+  return max(col, 0.);
+}
+`;
+const VS_TRI = `attribute vec2 aP; void main(){ gl_Position = vec4(aP, 0., 1.); }`;
+const FS_HERO = `#extension GL_OES_standard_derivatives : enable
+` + PREC + COMMON + `
+uniform float uScroll, uAz, uMobile;
+float sdBox(vec2 p, vec2 b){ vec2 d = abs(p)-b; return length(max(d,0.)) + min(max(d.x,d.y),0.); }
+// rounded-trace glint (energy conserving under blur)
+float glint(float x, float h, float B, float th, float thMax, float rough){
+  float a = abs(th);
+  float fade = smoothstep(thMax + rough, thMax - rough, a);
+  if (fade <= 0.) return 0.;
+  float u0 = clamp(th/thMax, -1., 1.) * h * .94;
+  float w = max(rough/thMax * h, .00025);
+  return boxc(x - u0, w, B) * fade;
+}
+// one Manhattan routing layer. axis 0: traces along x, 1: along z
+// returns vec2(coverage, glint)
+vec2 layer(vec2 d, vec2 B, vec3 Hh, float pitch, float wA, float wB, float segBase, float segVar, float dens, float seed, float thMax, float lobe){
+  vec2 q = seed > .5 ? d.yx : d;
+  vec2 Bq = seed > .5 ? B.yx : B;
+  vec3 Hq = seed > .5 ? Hh.zyx : Hh;
+  float j = floor(q.y/pitch + seed*.37);
+  float v = (fract(q.y/pitch + seed*.37) - .5)*pitch;
+  float segL = segBase + segVar*hash12(vec2(j, 7.7 + seed));
+  float sx = q.x/segL + hash12(vec2(j, 3.1 + seed))*13.;
+  float si = floor(sx), su = fract(sx);
+  float on = step(hash12(vec2(j + seed*40., si)), dens);
+  float hw = hash12(vec2(j, 5.3 + seed)) > .8 ? wB : wA;
+  float gap = .05 + .12*hash12(vec2(si, j + .5 + seed));
+  float al = boxc((su - .5)*segL, (.5 - gap)*segL, Bq.x);
+  float var = .6 + .8*hash12(vec2(si*1.3, j*1.37 + seed));
+  float cov = on*al*boxc(v, hw, Bq.y);
+  float th = atan(Hq.z, Hq.y);
+  float along = exp(-pow(Hq.x/max(Hq.y,.05)/lobe, 2.));
+  float g = on*al*glint(v, hw, Bq.y, th, thMax, .06)*along;
+  float avg = dens*(1. - 2.*.11)*2.*hw/pitch;
+  float far = smoothstep(.4*pitch, 1.3*pitch, Bq.y);
+  return vec2(mix(cov*var, avg, far), mix(g, avg*along*.04, far));
+}
+void main(){
+  vec2 fc = gl_FragCoord.xy;
+  vec2 p = (fc - .5*uRes)/uRes.y;
+  float asp = uRes.x/uRes.y;
+  float pitch = mix(.62, .82, uMobile);
+  float yaw = -.42;
+  float f = 1.75;
+  vec3 ro = vec3(.2, 1., -1.0 + uScroll*.12);
+  vec3 rd = rotY(rotX(normalize(vec3(p, f)), pitch), yaw);
+  vec3 rdF = rotY(rotX(normalize(vec3(.25, -.1, f)), pitch), yaw);
+  float tf = ro.y / max(-rdF.y, .02);
+  float el = .34;
+  vec3 L = normalize(vec3(sin(uAz)*cos(el), sin(el), cos(uAz)*cos(el)));
+  vec3 sunCol = vec3(1., .975, .95);
+  vec3 col = vec3(0.);
+  float t = ro.y / max(-rd.y, 1e-3);
+  vec2 dm = ro.xz + rd.xz*t;
+  vec3 V = -rd;
+  vec3 Hh = normalize(L + V);
+  vec2 fw = max(fwidth(dm), vec2(1e-5));
+  float coc = abs(1./tf - 1./t) * tf * (uRes.y/900.) * 30.;
+  vec2 Bm = fw * (1. + coc);
+
+  // ---- macro layout (die units) ----
+  vec2 dieLo = vec2(-.55, -3.), dieHi = vec2(6., 8.);
+  float edgeD = sdBox(dm - .5*(dieLo+dieHi), .5*(dieHi-dieLo));
+  float inDie = 1. - smoothstep(-Bm.x, Bm.x, edgeD);
+  float b0 = sdBox(dm - vec2(.62, .9), vec2(.42, .3));
+  float b1 = sdBox(dm - vec2(1.62, 1.12), vec2(.36, .5));
+  float b2 = sdBox(dm - vec2(1.05, 2.15), vec2(.7, .32));
+  float b3 = sdBox(dm - vec2(2.6, 1.7), vec2(.42, .62));
+  float b4 = sdBox(dm - vec2(.45, -.15), vec2(.5, .38));
+  float bd = min(min(min(b0,b1), min(b2,b3)), b4);
+  float inBlk = 1. - smoothstep(-Bm.x*.5, Bm.x*.5, bd);
+  float halo = exp(-max(bd, 0.)*5.);
+  float dens = clamp(.12 + .7*halo + .25*(noise2(dm*3.3 + 3.1) - .5), .04, .9);
+
+  vec2 d = dm; vec2 B = Bm;
+  // ---- standard-cell rows: the fine "barcode" texture of logic areas ----
+  float rp = .021;
+  float rj = floor(d.y/rp);
+  float rv = fract(d.y/rp);
+  float cw = .006 + .016*hash12(vec2(rj, 1.1));
+  float ci = floor(d.x/cw + hash12(vec2(rj, 2.2))*9.);
+  float cell = hash12(vec2(ci, rj));
+  float cellF = smoothstep(.4, 1.3, B.x/cw);
+  float cellV = mix(cell, .5, cellF);
+  float rail = boxc((rv - .5)*rp, .38*rp, B.y);
+  float rowF = smoothstep(.3*rp, 1.2*rp, B.y);
+  float logic = mix(cellV*rail, .38, rowF);
+
+  // ---- metal layers ----
+  vec2 m2 = layer(d, B, Hh, .0115, .0028, .0045, .05, .22, dens, 0., 1.05, .3);
+  vec2 m3 = layer(d, B, Hh, .016, .0035, .006, .07, .3, dens*.85, 1., 1.1, .3);
+  // top-metal straps (sparse)
+  float pS = .34;
+  float kS = floor(d.x/pS + .21);
+  float xs = (fract(d.x/pS + .21) - .5)*pS;
+  float onS = step(.62, hash12(vec2(kS, floor(d.y/1.1 + hash12(vec2(kS,.7))))));
+  float hwS = .022;
+  float covS = onS*boxc(xs, hwS, B.x);
+  float thS = atan(Hh.x, Hh.y);
+  float alongS = exp(-pow(Hh.z/max(Hh.y,.05)/.3, 2.));
+  float gS = onS*alongS*glint(xs, hwS, B.x, thS, 1.1, .05);
+  float farS = smoothstep(.4*pS, 1.3*pS, B.x);
+  covS = mix(covS, .45*2.*hwS/pS, farS); gS = mix(gS, 0., farS);
+
+  // ---- SRAM lattice in blocks ----
+  vec2 lp = d*92.;
+  vec2 lf = abs(fract(lp) - .5);
+  vec2 BL = B*92.;
+  float lat = max(mix(boxc(lf.x, .2, BL.x), .4, smoothstep(.4, 1.2, BL.x)), mix(boxc(lf.y, .14, BL.y), .28, smoothstep(.4, 1.2, BL.y)));
+  float blkEdge = boxc(bd + .012, .004, max(B.x,B.y));
+
+  // ---- pads, seal ring ----
+  float pad = boxc(dm.y - 6.6, .06, Bm.y) * boxc((fract(dm.x/.16) - .5)*.16, .05, Bm.x);
+  float seal = boxc(edgeD + .03, .004, max(Bm.x, Bm.y)) + .6*boxc(edgeD + .045, .0025, max(Bm.x,Bm.y));
+
+  // ---- light: broad raking key, slowly sweeping ----
+  vec2 sc = vec2(2.1 + .9*sin(uAz*2.1 + .4), 1.9);
+  vec2 qd = (dm - sc) / vec2(2.0, 1.7);
+  float I = exp(-dot(qd,qd))*1.1 + .05;
+
+  float ndl = max(L.y, 0.);
+  float cosV = max(V.y, 0.);
+  float thick = .5 + .5*noise2(dm*1.1 + 1.7);
+  vec3 film = .5 + .5*cos(6.2831*(thick*1.6*(.55 + .45*cosV) + vec3(0., .33, .67)));
+  film = mix(vec3(1.), film, .14);
+  vec3 alu = vec3(.88, .89, .9);
+  vec3 cu = vec3(.93, .64, .52);
+  vec3 si = vec3(.022, .022, .026);
+  vec3 alb = si*(.25 + 1.7*logic);
+  alb = mix(alb, vec3(.03,.03,.034)*(.6 + .8*lat), inBlk);
+  alb += m3.x*vec3(.045,.036,.033)*(1. - inBlk);
+  alb += m2.x*vec3(.075)*(1. - inBlk);
+  alb += covS*vec3(.06);
+  alb += pad*vec3(.1) + blkEdge*vec3(.05);
+  col += I*sunCol*ndl*alb*2.6*film;
+  // unresolved grating sheen on SRAM
+  float grat = fract(2.2*(Hh.x*.8 + Hh.z) + .15);
+  vec3 diffr = mix(vec3(1.), .5 + .5*cos(6.2831*(grat + vec3(0.,.33,.67))), .16);
+  col += I*inBlk*diffr*.05*smoothstep(.2, 1., BL.x);
+  // specular glints
+  vec3 spec = alu*m2.y*1.2*(1. - inBlk) + cu*m3.y*.28*(1. - inBlk) + alu*gS*.32;
+  spec += alu*seal*.35*alongS + alu*pad*.2*exp(-pow(thS/.25, 2.));
+  col += I*sunCol*spec*2.4*film;
+  // passivation sheen: the light source mirrored in the glassy top layer (thin-film colour lives here)
+  float hAng = acos(clamp(Hh.y, -1., 1.));
+  float Fr = .04 + .96*pow(1. - clamp(dot(V, Hh), 0., 1.), 5.);
+  float sheen = exp(-pow(hAng/.16, 2.)) * Fr;
+  vec3 filmS = mix(vec3(1.), .5 + .5*cos(6.2831*(thick*1.9*(.55 + .45*cosV) + vec3(0., .33, .67))), .22);
+  col += I*sunCol*filmS*sheen*.55*(1. - .5*inBlk);
+  // package beyond the die
+  vec3 pkg = vec3(.007,.007,.008)*(.6 + .8*fbm(dm*6.));
+  col = mix(pkg*I*ndl*2.6, col, inDie);
+  col *= exp(-max(t - tf*1.5, 0.)*.18);
+  if (rd.y > -.004) col = vec3(0.);
+
+  // very faint airborne scatter around the key
+  vec2 lp2 = vec2(asp*.5 + .05, .55);
+  float shaft = exp(-length((p - lp2)*vec2(1.1, 1.6))*2.2);
+  col += sunCol*shaft*.018;
+
+  // the copy lives on the left: the die falls into darkness there
+  col *= mix(.12, 1., smoothstep(-.2, .45, p.x/asp + .25));
+  float expo = 2.1 * (1. - .3*uScroll);
+  gl_FragColor = vec4(finish(col, expo, .55), 1.);
+}
+`;
+
+function compile(gl, type, src) {
+  const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s);
+  if (!gl.getShaderParameter(s, gl.COMPILE_STATUS) && !gl.isContextLost()) { const log = gl.getShaderInfoLog(s); gl.deleteShader(s); throw new Error('shader: ' + log); }
+  return s;
+}
+function program(gl, vs, fs) {
+  const p = gl.createProgram();
+  gl.attachShader(p, compile(gl, gl.VERTEX_SHADER, vs)); gl.attachShader(p, compile(gl, gl.FRAGMENT_SHADER, fs));
+  gl.linkProgram(p);
+  if (!gl.getProgramParameter(p, gl.LINK_STATUS) && !gl.isContextLost()) throw new Error('link: ' + gl.getProgramInfoLog(p));
+  const u = {}; const n = gl.getProgramParameter(p, gl.ACTIVE_UNIFORMS);
+  for (let i = 0; i < n; i++) { const info = gl.getActiveUniform(p, i); const name = info.name.replace(/\[0\]$/, ''); u[name] = gl.getUniformLocation(p, info.name); }
+  return { p, u };
+}
+function triBuffer(gl) {
+  const b = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, b);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW); return b;
+}
+
+const mount = document.querySelector('[data-scene="hero"]');
+if (!mount) return;
+const sc = { gl: null, cv: null, prog: null, buf: null, scale: coarse ? (weak ? .6 : .75) : 1, t: 11, dirty: true, drawn: false, failed: false, visible: true, lastScroll: -1, dpr: 1 };
+let heroP = 0, ptrX = 0, ptrS = 0;
+if (finePtr) addEventListener('pointermove', e => { ptrX = e.clientX / innerWidth * 2 - 1; }, { passive: true });
+
+function fallback() { sc.failed = true; mount.classList.add('is-fallback'); }
+function release() {
+  if (!sc.gl) return;
+  try { const ext = sc.gl.getExtension('WEBGL_lose_context'); if (ext) ext.loseContext(); } catch (e) {}
+  sc.cv.remove(); sc.gl = null; sc.cv = null; sc.prog = null; sc.drawn = false;
+}
+function create() {
+  if (sc.gl || sc.failed) return;
+  const cv = document.createElement('canvas');
+  const gl = cv.getContext('webgl', { alpha: false, antialias: false, depth: false, stencil: false, powerPreference: 'high-performance', preserveDrawingBuffer: false });
+  if (!gl) { fallback(); return; }
+  mount.appendChild(cv);
+  cv.addEventListener('webglcontextlost', e => { e.preventDefault(); if (sc.cv === cv) { sc.gl = null; sc.cv = null; sc.drawn = false; cv.remove(); } });
+  sc.gl = gl; sc.cv = cv;
+  try {
+    if (!gl.getExtension('OES_standard_derivatives')) throw new Error('no derivatives');
+    sc.prog = program(gl, VS_TRI, FS_HERO); sc.buf = triBuffer(gl);
+  } catch (err) {
+    console.warn('[gl] hero fell back:', err.message);
+    release(); fallback(); return;
+  }
+  resize(); sc.dirty = true; kick();
+}
+function resize() {
+  if (!sc.gl) return;
+  const base = Math.min(devicePixelRatio || 1, 1.5);
+  sc.dpr = base;
+  const w = mount.clientWidth, h = mount.clientHeight;
+  const W = Math.max(2, Math.round(w * base * sc.scale)), H = Math.max(2, Math.round(h * base * sc.scale));
+  if (sc.cv.width !== W || sc.cv.height !== H) { sc.cv.width = W; sc.cv.height = H; }
+  sc.gl.viewport(0, 0, W, H);
+  sc.dirty = true;
+}
+function draw(gl, t) {
+  const { p, u } = sc.prog;
+  gl.useProgram(p);
+  gl.bindBuffer(gl.ARRAY_BUFFER, sc.buf);
+  const loc = gl.getAttribLocation(p, 'aP'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+  gl.uniform2f(u.uRes, sc.cv.width, sc.cv.height);
+  gl.uniform1f(u.uTime, t);
+  if (u.uDpr) gl.uniform1f(u.uDpr, sc.cv.width / Math.max(1, mount.clientWidth));
+  sc.lastScroll = heroP;
+  if (!stillAmbient) ptrS += (ptrX - ptrS) * .04;
+  gl.uniform1f(u.uScroll, heroP);
+  gl.uniform1f(u.uAz, .62 + .35 * Math.sin(t * .07) + ptrS * .08 * Math.PI * .5);
+  gl.uniform1f(u.uMobile, mqDesk.matches ? 0 : 1);
+  gl.drawArrays(gl.TRIANGLES, 0, 3);
+}
+// adaptive quality: on touch devices frames are capped at ~30 fps, so compare against that cap
+const SLOW_MS = coarse ? 40 : 22, BASE_MS = coarse ? 33 : 16;
+let dtAvg = BASE_MS, dtN = 0, lastGL = 0;
+function frame(now, dt) {
+  if (!sc.gl || !sc.visible) return false;
+  if (coarse && now - lastGL < 31) return;
+  const realDt = lastGL ? Math.min(.1, (now - lastGL) / 1000) : dt;
+  lastGL = now;
+  const animate = !stillAmbient;
+  if (!animate && !sc.dirty && Math.abs(heroP - sc.lastScroll) <= .002) return false;
+  sc.t = animate ? sc.t + realDt : sc.t;
+  try { draw(sc.gl, sc.t); } catch (e) { console.warn('[gl] draw', e.message); release(); fallback(); return false; }
+  sc.dirty = false;
+  if (!sc.drawn) { sc.drawn = true; const cv = sc.cv; requestAnimationFrame(() => cv && cv.classList.add('is-on')); }
+  dtAvg = dtAvg * .975 + realDt * 1000 * .025; dtN++;
+  if (dtN > 40 && dtAvg > SLOW_MS) { dtN = 0; dtAvg = BASE_MS; if (sc.scale > .5) { sc.scale = Math.max(.5, sc.scale - .15); resize(); } }
+  if (!animate) return false;
+}
+function kick() { ticker.add(frame); }
+
+/* the backdrop is fixed, so it is only ever offscreen when the tab is hidden; both cases stop the loop */
+new IntersectionObserver(([e]) => { sc.visible = e.isIntersecting; if (sc.visible) { sc.dirty = true; lastGL = 0; kick(); } }, { threshold: 0 }).observe(mount);
+document.addEventListener('visibilitychange', () => { if (!document.hidden) { lastGL = 0; kick(); } });
+addEventListener('scroll', () => { heroP = clamp01(scrollY / Math.max(1, innerHeight)); if (Math.abs(heroP - sc.lastScroll) > .002) { sc.dirty = true; kick(); } }, { passive: true });
+let rzT = 0;
+addEventListener('resize', () => { clearTimeout(rzT); rzT = setTimeout(() => { resize(); kick(); }, 150); }, { passive: true });
+create();
+})();
+</script>
 </body>
 </html>
