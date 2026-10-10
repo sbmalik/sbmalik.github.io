@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Subtain Malik</title>
+<title>S.B Malik</title>
 <meta name="description" content="Subtain Malik, Senior AI/ML Engineer in the Netherlands. Six results from putting machine learning into production.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,9 +16,10 @@
     --faint:rgba(237,237,238,.50);
     --rule:rgba(255,255,255,.13);
     --accent:#67d3df;
-    --bg:#0e0f12;
+    --bg:#000;
     --sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
     --heading:"Inter Tight",var(--sans);
+    --ease:cubic-bezier(.4,0,.2,1);
     color-scheme:dark;
   }
   *{box-sizing:border-box}
@@ -30,14 +31,15 @@
   .page{min-height:100vh;display:grid;grid-template-rows:auto auto 1fr auto;
     max-width:1600px;margin:0 auto;padding:clamp(28px,4vh,52px) clamp(16px,4vw,64px) clamp(24px,3.5vh,44px)}
 
-  /* top */
-  .top{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;
-    padding-bottom:clamp(22px,3.5vh,40px);border-bottom:1px solid var(--rule)}
-  .who{display:flex;align-items:center;gap:20px}
-  .who img{width:72px;height:72px;border-radius:50%;object-fit:cover;filter:saturate(.85);
+  /* top: a compact hero. Inter Tight light name, a two-line statement, two calls to action */
+  .top{display:flex;align-items:stretch;justify-content:space-between;gap:22px 40px;flex-wrap:wrap;
+    padding-bottom:clamp(14px,2.2vh,20px);border-bottom:1px solid var(--rule)}
+  .who{display:flex;align-items:center;gap:22px}
+  .who > img{width:72px;height:72px;border-radius:50%;object-fit:cover;filter:saturate(.85);flex:none;
     box-shadow:0 0 0 1px var(--rule)}
   h1{margin:0;font-family:var(--heading);font-weight:300;color:var(--ink);font-size:clamp(30px,2.9vw,42px);line-height:1;letter-spacing:-.035em}
-  .role{margin:8px 0 0;font-size:15px;color:var(--dim)}
+  .lede{margin:8px 0 0;font-family:var(--sans);font-weight:400;font-size:15px;line-height:1.5;letter-spacing:0;color:var(--dim)}
+  .side{display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;gap:14px}
   .links{display:flex;gap:10px 26px;flex-wrap:wrap}
   a{color:var(--dim);text-decoration:none;transition:color .22s}
   a:hover,a:focus-visible{color:var(--accent);outline:none;}
@@ -46,9 +48,9 @@
   .links svg{width:15px;height:15px;flex:none;opacity:.85}
 
   /* board */
-  .highlights{align-self:center;padding:clamp(22px,3.5vh,36px) 0 clamp(12px,3vh,40px)}
+  .highlights{align-self:start;padding:clamp(22px,3.5vh,36px) 0 clamp(12px,3vh,40px)}
   .board{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));margin:0;padding:0;list-style:none}
-  .card{display:flex;flex-direction:column;padding:clamp(26px,4.5vh,52px) clamp(18px,1.6vw,30px);
+  .card{display:flex;flex-direction:column;padding:clamp(14px,2.6vh,30px) clamp(18px,1.6vw,30px);
     border-left:1px solid var(--rule);opacity:0;transform:translateY(8px);
     animation:rise 1.2s cubic-bezier(.2,.7,.2,1) forwards}
   .card:first-child{border-left:0;padding-left:0}
@@ -57,7 +59,7 @@
   .card:nth-child(4){animation-delay:.24s}.card:nth-child(5){animation-delay:.32s}.card:nth-child(6){animation-delay:.4s}
   @keyframes rise{to{opacity:1;transform:none}}
   .n{font-size:11px;font-weight:500;letter-spacing:.04em;color:var(--faint);font-variant-numeric:tabular-nums}
-  .big{margin:clamp(14px,2.5vh,26px) 0 0;font-family:var(--heading);font-weight:300;font-size:clamp(42px,3.7vw,64px);line-height:1;
+  .big{margin:clamp(10px,1.6vh,16px) 0 0;font-family:var(--heading);font-weight:300;font-size:clamp(36px,3.3vw,52px);line-height:1;
     color:var(--accent);font-variant-numeric:tabular-nums;letter-spacing:-.035em;white-space:nowrap}
   .big small{font-size:.38em;margin-left:.2em;letter-spacing:0;font-weight:400}
   .card h2{margin:16px 0 0;font-weight:500;font-size:clamp(16px,1.2vw,18px);line-height:1.3;letter-spacing:-.01em;color:var(--ink)}
@@ -76,7 +78,7 @@
     .board{grid-template-columns:1fr}
     .card,.card:nth-child(n){border-left:0;padding:28px 0;border-top:1px solid var(--rule)}
     .card:first-child{border-top:0}
-    .who img{width:60px;height:60px}
+    .who > img{width:60px;height:60px}
   }
   @media (prefers-reduced-motion:reduce){.card{animation:none;opacity:1;transform:none}}
   @media print{
@@ -84,95 +86,54 @@
     :root{--ink:#111;--soft:#333;--dim:#555;--faint:#888;--rule:#ddd;--accent:#0a6f7d}
     .card{animation:none;opacity:1;transform:none}
   }
-  /* timeline */
-  .journey{padding:clamp(22px,3.5vh,36px) 0 clamp(26px,4vh,44px);border-bottom:1px solid var(--rule)}
-  .tl{position:relative;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));margin:0;padding:50px 0 0;list-style:none}
-  .tl::before{content:"";position:absolute;left:4px;right:0;top:32px;height:1px;
-    background:linear-gradient(90deg,var(--rule),rgba(255,255,255,.3))}
-  .tl>li{position:relative;padding-right:18px;cursor:pointer;outline:none;transition:opacity .35s}
-  /* hovering the line: the point under the cursor stays lit, the rest step back */
-  .tl>li{opacity:.62}
-  .tl>li.now{opacity:.85}
-  .tl>li:hover,.tl>li:focus-visible,.tl>li:has(:focus-visible){opacity:1}
-  /* a faint dotted underline: the usual hint that a name holds more */
-  .tl b{text-decoration:underline dotted rgba(237,237,238,.28);text-decoration-thickness:1px;text-underline-offset:5px}
-  .tl>li:hover b,.tl>li:focus-visible b,.tl>li:has(:focus-visible) b{text-decoration-color:var(--accent);text-decoration-style:solid}
-  /* on load, a light runs once along the line and wakes each point as it passes */
-  .tl::after{content:"";position:absolute;left:0;top:31px;height:3px;width:120px;pointer-events:none;
-    background:linear-gradient(90deg,transparent,rgba(103,211,223,.9),transparent);filter:blur(1px);
-    opacity:0;animation:sweep 2.4s .9s cubic-bezier(.45,0,.25,1) 1 backwards}
-  @keyframes sweep{0%{opacity:0;left:-60px}10%{opacity:1}85%{opacity:1}100%{opacity:0;left:calc(100% - 120px)}}
-  .tl>li:not(.now) .dot{animation:wake .9s ease-out 1 backwards;animation-delay:calc(.95s + var(--i) * .3s)}
-  .tl>li.win .dot{animation-name:wakeD}
-  @keyframes wake{0%,100%{transform:scale(1)}40%{transform:scale(1.7);border-color:var(--accent);box-shadow:0 0 10px rgba(103,211,223,.5)}}
-  @keyframes wakeD{0%,100%{transform:rotate(45deg) scale(1)}40%{transform:rotate(45deg) scale(1.7);border-color:var(--accent);box-shadow:0 0 10px rgba(103,211,223,.5)}}
-  @media (prefers-reduced-motion:reduce){.tl::after{display:none}.tl>li:not(.now) .dot{animation:none}}
-  .tl .dot{position:absolute;top:-22px;left:0;width:9px;height:9px;border-radius:50%;
-    background:var(--bg);border:1px solid var(--dim);transition:transform .4s,border-color .4s,background .4s}
-  .tl .yr{position:absolute;top:-48px;left:0;font-size:12px;font-weight:500;letter-spacing:.04em;color:var(--faint);
-    font-variant-numeric:tabular-nums;transition:color .4s}
-  .tl>li:hover .yr,.tl>li:focus-visible .yr,.tl>li:has(:focus-visible) .yr,.tl .now .yr{color:var(--accent)}
-  .tl .win .dot{border-radius:1px;width:8px;height:8px;top:-21px;left:1px;transform:rotate(45deg);
-    border-color:rgba(103,211,223,.7);background:rgba(103,211,223,.22)}
-  .tl b a{color:inherit}
-  .tl .now .dot{background:var(--accent);border-color:var(--accent);box-shadow:0 0 10px rgba(103,211,223,.35)}
-  /* current role: a heartbeat, lub-dub then rest */
-  .tl .now .dot{animation:beat 1.1s ease-in-out infinite}
-  @keyframes beat{
-    0%,100%{transform:scale(1);box-shadow:0 0 6px rgba(103,211,223,.3)}
-    15%{transform:scale(1.45);box-shadow:0 0 14px rgba(103,211,223,.6)}
-    30%{transform:scale(1.05)}
-    45%{transform:scale(1.3);box-shadow:0 0 12px rgba(103,211,223,.5)}
-    65%{transform:scale(1)}}
-  .tl b{display:block;font-weight:500;font-size:15px;line-height:1.3;letter-spacing:-.01em;color:var(--soft);transition:color .4s}
-  .tl i{display:block;font-style:normal;font-size:12.5px;color:var(--faint);margin-top:4px;font-variant-numeric:tabular-nums;opacity:0;transform:translateY(-4px);
-    transition:opacity .4s,transform .4s}
-  .tl>li:hover i,.tl>li:focus-visible i,.tl>li:has(:focus-visible) i{opacity:1;transform:none}
-  @media (hover:none){.tl i{opacity:1;transform:none}}
-  .tl>li:hover .dot,.tl>li:focus-visible .dot,.tl>li:has(:focus-visible) .dot{transform:scale(1.5);border-color:var(--accent)}
-  .tl>li:hover b,.tl>li:focus-visible b,.tl>li:has(:focus-visible) b{color:var(--ink)}
-  .tl .win:hover .dot,.tl .win:focus-visible .dot,.tl .win:has(:focus-visible) .dot{transform:rotate(45deg) scale(1.5);border-color:var(--accent);background:rgba(103,211,223,.25)}
-  .tip{position:absolute;top:calc(100% + 16px);left:-14px;width:300px;z-index:3;
-    padding:16px 18px 14px;background:#17181c;border:1px solid var(--rule);border-radius:2px;
-    box-shadow:0 18px 50px rgba(0,0,0,.45);opacity:0;visibility:hidden;transform:translateY(-6px);
-    transition:opacity .35s,transform .35s,visibility 0s .35s;pointer-events:none}
-  .tl>li:last-child .tip{left:auto;right:-14px}
-  .tl>li:hover .tip,.tl>li:focus-visible .tip,.tl>li:has(:focus-visible) .tip{opacity:1;visibility:visible;transform:none;transition:opacity .35s,transform .35s}
-  /* only one card at a time: hovering a point hides a keyboard-focused one */
-  .tl:hover>li:not(:hover) .tip{opacity:0;visibility:hidden}
-  /* touch screens have no hover: a tap opens the card */
-  @media (hover:none){.tl>li:focus .tip,.tl>li:focus-within .tip{opacity:1;visibility:visible;transform:none}}
-  .tip strong{display:block;font-weight:500;font-size:15px;letter-spacing:-.01em;color:var(--ink)}
-  .tip em{display:block;font-style:normal;font-size:12.5px;color:var(--faint);margin-top:3px}
-  .tip ul{margin:10px 0 0;padding:0;list-style:none}
-  .tip ul li{position:relative;padding-left:14px;font-size:15px;line-height:1.45;color:var(--dim);margin-top:6px}
-  .tip ul li::before{content:"";position:absolute;left:0;top:.62em;width:5px;height:1px;background:var(--accent)}
+  /* journey: a strip of film stills, newest at the right */
+  .journey{padding:clamp(14px,2vh,18px) 0 clamp(16px,2.2vh,20px);border-bottom:1px solid var(--rule)}
+  .jhead{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:8px}
+  .jhead h3{margin:0}
+  .jnav{display:flex;align-items:center;gap:6px}
+  .jcount{font-size:11px;font-weight:500;letter-spacing:.04em;color:var(--faint);font-variant-numeric:tabular-nums;margin-right:10px;white-space:nowrap}
+  .jbtn{width:26px;height:26px;display:inline-flex;align-items:center;justify-content:center;padding:0;cursor:pointer;
+    border:1px solid var(--rule);border-radius:2px;background:transparent;color:var(--soft);
+    transition:border-color .22s var(--ease),color .22s var(--ease),opacity .22s var(--ease)}
+  .jbtn svg{width:14px;height:14px;display:block}
+  .jbtn:hover,.jbtn:focus-visible{border-color:rgba(255,255,255,.4);color:#fff;outline:none}
+  .jbtn[disabled]{opacity:.28;cursor:default;border-color:var(--rule);color:var(--soft)}
+  .reel{--n:3;--gap:2px;display:flex;gap:var(--gap);margin:0;padding:0;list-style:none;
+    overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;
+    scrollbar-width:none;-ms-overflow-style:none}
+  .reel::-webkit-scrollbar{display:none}
+  .still{position:relative;flex:0 0 calc((100% - (var(--n) - 1) * var(--gap)) / var(--n));aspect-ratio:2.6/1;max-height:clamp(148px,17.6vh,176px);
+    scroll-snap-align:start;overflow:hidden;isolation:isolate;outline:none;cursor:default;
+    background:radial-gradient(120% 100% at 72% 10%,#1b1d23 0%,#131419 46%,#0f1014 100%)}
+  .still:focus-visible{box-shadow:inset 0 0 0 1px rgba(255,255,255,.45)}
+  .still__cv{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;transition:opacity .9s var(--ease)}
+  .still__cv.is-on{opacity:.8}
+  /* hover: the still brightens a little and the fact opens to its full length; the panel itself never changes size */
+  .still:hover .still__cv.is-on,.still:focus-visible .still__cv.is-on,.still:focus-within .still__cv.is-on{opacity:1}
+  .still__fade{position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(180deg,rgba(14,15,18,0) 0%,rgba(14,15,18,.1) 28%,rgba(14,15,18,.66) 60%,rgba(14,15,18,.92) 100%)}
+  .still__txt{position:absolute;left:0;right:0;bottom:0;z-index:1;padding:12px 18px 12px}
+  .still__yr{display:block;font-size:11px;font-weight:500;letter-spacing:.04em;color:var(--faint);font-variant-numeric:tabular-nums}
+  .still--now .still__yr{color:var(--accent)}
+  .still__nm{display:block;margin-top:3px;font-family:var(--heading);font-weight:300;font-size:clamp(19px,1.55vw,22px);line-height:1.05;letter-spacing:-.03em;color:#fff}
+  .still__nm a{color:inherit}
+  .still__nm a:hover,.still__nm a:focus-visible{color:var(--accent)}
+  .still__ro{display:block;margin-top:3px;font-size:12px;line-height:1.35;color:var(--dim)}
+  .still__fact{margin:5px 0 0;font-size:12.5px;line-height:1.4;color:var(--soft);
+    display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:1;overflow:hidden;
+    max-height:1.4em;transition:max-height .5s var(--ease)}
+  .still:hover .still__fact,.still:focus-visible .still__fact,.still:focus-within .still__fact{-webkit-line-clamp:3;max-height:4.2em}
+  @media (max-width:1199px){.reel{--n:2}.still{aspect-ratio:2.2/1}}
   @media (max-width:759px){
-    .tl{grid-template-columns:1fr;padding:0 0 0 22px;gap:18px}
-    .tl::before{left:4px;right:auto;top:6px;bottom:6px;width:1px;height:auto;
-      background:linear-gradient(180deg,var(--rule),rgba(255,255,255,.3))}
-    .tl::after{display:none}
-    .tl>li,.tl>li.now{opacity:1}
-    .tl .yr{position:static;display:block;font-size:12px;margin-bottom:2px}
-    .tl i{opacity:1;transform:none}
-    .tl .dot{top:28px;left:-22px}
-    .tl .win .dot{top:29px;left:-21px}
-    .tip{position:static;width:auto;margin-top:0;max-height:0;overflow:hidden;padding:0 16px;border-width:0;
-      transform:none;transition:max-height .4s,padding .4s,opacity .4s,visibility 0s .4s}
-    .tl>li:focus .tip,.tl>li:focus-within .tip{max-height:260px;padding:14px 16px;margin-top:10px;border-width:1px}
+    .top{flex-direction:column;align-items:stretch}
+    .side{flex-direction:row;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px 20px}
+    .who > img{width:60px;height:60px}
+    .reel{--n:1;--gap:6px}
+    .still{flex-basis:86%;aspect-ratio:1.45/1;max-height:none;scroll-snap-align:center}
+    .still__txt{padding:12px 14px 12px}
   }
-  /* legend, inline in the hint */
-  .key{margin-left:4px}
-  .k{display:inline-block;width:7px;height:7px;margin:0 4px 0 6px;border-radius:50%;border:1px solid var(--dim);
-    background:var(--bg);vertical-align:0}
-  .key>.k:first-child{margin-left:1px}
-  .k.win{width:6px;height:6px;border-radius:1px;transform:rotate(45deg);border-color:rgba(103,211,223,.7);background:rgba(103,211,223,.22)}
-  .k.now{background:var(--accent);border-color:var(--accent);box-shadow:0 0 5px rgba(103,211,223,.35)}
-  .journey h3{margin-bottom:4px}
-  .hint{margin:0 0 22px;font-size:10.5px;letter-spacing:.02em;color:rgba(237,237,238,.38)}
-  .hint .touch{display:none}
-  @media (hover:none){.hint .mouse{display:none}.hint .touch{display:inline}}
-  @media (max-width:759px){.key{display:block;margin:4px 0 0}.hint{margin-bottom:16px}}
+  @media (hover:none){.still__fact{max-height:none;-webkit-line-clamp:4}.still__cv.is-on{opacity:.9}}
+  @media (prefers-reduced-motion:reduce){.still__cv,.still__fact{transition:none}}
   /* "My models work at" logo strip (from index_claude.html) */
   .partners{padding-top:clamp(18px,3vh,30px);border-top:1px solid var(--rule)}
   .built{display:flex;align-items:center;gap:clamp(22px,3.4vw,44px);flex-wrap:wrap;margin:0}
@@ -194,21 +155,47 @@
   .built__logo--relymer{height:30px}
   .built__k{font-size:11px;font-weight:500;letter-spacing:.04em;color:var(--faint)}
   @media (max-width:560px){
-    .built{display:grid;grid-template-columns:auto auto;justify-content:start;gap:18px 36px}
-    .built__k{grid-column:1/-1}
+    /* phone: an even 4-column grid, every logo centred in its cell and scaled down a little */
+    .built{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));justify-items:center;align-items:center;gap:22px 8px}
+    .built__k{grid-column:1/-1;justify-self:start;margin-bottom:2px}
+    .built__w{zoom:.8}
   }
-  @media print{.tip{display:none}}
-  /* backdrop: index_claude's procedural silicon, lit from the top right, fixed behind the page (via index_9) */
-  .media{position:fixed;inset:0;z-index:0;pointer-events:none;background:var(--bg);overflow:hidden}
-  .media__fb{position:absolute;inset:0;background:radial-gradient(120% 80% at 78% 38%,#1b1d22 0%,#0e0f12 40%,#0e0f12 72%)}
+  @media print{.jnav{display:none}.reel{overflow:visible;flex-wrap:wrap}.still__fact{max-height:none}}
+  .page{position:relative;z-index:2}
+  @media (max-height:860px) and (min-width:760px){.highlights{padding-top:16px;padding-bottom:6px}.card{padding-top:10px;padding-bottom:10px}}
+  /* portrait: no frame. The bust stands on the header's hairline, lit by a faint cool halo */
+  .who{align-items:flex-end}
+  .pf{flex:none;position:relative;width:92px;height:106px;align-self:flex-end;
+    margin-bottom:calc(-1 * clamp(14px,2.2vh,20px))}
+  .pf::before{content:"";position:absolute;left:50%;top:6%;width:120px;height:120px;transform:translateX(-50%);border-radius:50%;
+    background:radial-gradient(circle,rgba(103,211,223,.055) 0%,rgba(103,211,223,.018) 42%,transparent 70%);pointer-events:none}
+  .pf img{position:relative;display:block;width:100%;height:100%;object-fit:cover;object-position:50% 0;
+    filter:saturate(.78) brightness(.78) contrast(.97);
+    -webkit-mask-image:linear-gradient(180deg,#000 44%,rgba(0,0,0,.55) 66%,transparent 88%);mask-image:linear-gradient(180deg,#000 44%,rgba(0,0,0,.55) 66%,transparent 88%)}
+  .who>div{padding-bottom:4px}
+  @media (max-width:759px){.pf{width:66px;height:72px;margin-bottom:0}.pf::before{width:84px;height:84px}}
+  /* contact icons under the tagline, each lights up in its own colour */
+  .nameline{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 16px}
+  .nameline .lede{margin:0}
+  .who .links{margin-top:14px;gap:8px 17px}
+  .who .links a{gap:0;padding:0}
+  .who .links svg{width:18px;height:18px;opacity:1}
+  .who .links a[href*="maps"]:hover,.who .links a[href*="maps"]:focus-visible{color:#ea4335}
+  .who .links a[href^="mailto:"]:hover,.who .links a[href^="mailto:"]:focus-visible{color:#f2c94c}
+  .who .links a[href*="linkedin"]:hover,.who .links a[href*="linkedin"]:focus-visible{color:#3a8fdc}
+  .who .links a[href*="github"]:hover,.who .links a[href*="github"]:focus-visible{color:#ffffff}
+  /* ---------- backdrop: the procedural silicon from index_claude, fixed behind the whole board ---------- */
+  .media{position:fixed;inset:0;z-index:0;pointer-events:none;background:#000;overflow:hidden}
+  .media__fb{position:absolute;inset:0;background:radial-gradient(120% 80% at 78% 38%,#1b1d22 0%,#0b0c0e 40%,#000 72%)}
   .media__fb::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(255,255,255,.025) 0 1px,transparent 1px 7px);
     -webkit-mask-image:linear-gradient(90deg,transparent 45%,#000 75%);mask-image:linear-gradient(90deg,transparent 45%,#000 75%)}
-  .media canvas{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;transition:opacity 1.4s cubic-bezier(.4,0,.2,1)}
+  .media canvas{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;transition:opacity 1.4s var(--ease)}
   .media canvas.is-on{opacity:.76}
-  /* left and bottom fades keep the text readable */
+  /* left and bottom fades: the copy lives on the left, the board sits on the bottom */
   .fade{position:fixed;inset:0;z-index:1;pointer-events:none;background:
-    linear-gradient(90deg,rgba(14,15,18,.78) 0%,rgba(14,15,18,.5) 26%,rgba(14,15,18,.18) 50%,transparent 76%),
-    linear-gradient(180deg,rgba(14,15,18,.34) 0%,rgba(14,15,18,.06) 16%,rgba(14,15,18,.2) 40%,rgba(14,15,18,.72) 62%,rgba(14,15,18,.94) 80%,#0e0f12 100%)}
+    linear-gradient(90deg,rgba(0,0,0,.78) 0%,rgba(0,0,0,.5) 26%,rgba(0,0,0,.18) 50%,transparent 76%),
+    linear-gradient(180deg,rgba(0,0,0,.34) 0%,rgba(0,0,0,.06) 16%,rgba(0,0,0,.2) 40%,rgba(0,0,0,.72) 62%,rgba(0,0,0,.94) 80%,#000 100%)}
+
   .page{position:relative;z-index:2}
   @media (prefers-reduced-motion:reduce){.media canvas{transition:none}}
   @media print{.media,.fade{display:none}}
@@ -221,109 +208,98 @@
 
   <header class="top">
     <div class="who">
-      <img src="img/ppic.jpg" alt="Subtain Malik">
+      <span class="pf"><img src="img/ppic-cutout.png" alt="Subtain Malik"></span>
       <div>
-        <h1>Subtain Malik</h1>
-        <p class="role">Senior AI/ML Engineer · Netherlands</p>
+        <div class="nameline">
+          <h1>S.B Malik</h1>
+        </div>
+        <nav class="links">
+          <a href="https://www.google.com/maps/place/Netherlands" target="_blank" rel="noopener" aria-label="Location: Netherlands" title="Netherlands"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path fill-rule="evenodd" d="M12 0C7.03 0 3 4.03 3 9c0 6.75 9 15 9 15s9-8.25 9-15c0-4.97-4.03-9-9-9Zm0 12.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7Z"/></svg></a>
+          <a href="mailto:iamsbmalik@gmail.com" aria-label="Email" title="Email"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M0 6.4V18a2 2 0 0 0 2 2h20a2 2 0 0 0 2-2V6.4l-11.4 7.7a1.1 1.1 0 0 1-1.2 0L0 6.4Zm.9-1.9L12 12 23.1 4.5A2 2 0 0 0 22 4H2a2 2 0 0 0-1.1.5Z"/></svg></a>
+          <a href="https://www.linkedin.com/in/sbmalik" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+          <a href="https://github.com/sbmalik" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+        </nav>
       </div>
     </div>
-    <nav class="links">
-      <a href="mailto:iamsbmalik@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg>Email</a>
-      <a href="https://www.linkedin.com/in/sbmalik" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>LinkedIn</a>
-      <a href="https://github.com/sbmalik" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>GitHub</a>
-    </nav>
   </header>
 
   <section class="journey" aria-label="Journey">
-    <h3>Journey</h3>
-    <p class="hint"><span class="mouse">Hover a point to see the full story</span><span class="touch">Tap a point to see the full story</span>
-      <span class="key">(<span class="k"></span>Work experience <span class="k win"></span>Other achievements <span class="k now"></span>Current role)</span></p>
-    <ol class="tl">
-        <li tabindex="0" class="win" style="--i:0">
-          <span class="yr">2018</span>
-          <span class="dot"></span>
-          <b>Gold Medal</b><i>MS, NUST · 2018 – 2021</i>
-          <div class="tip" role="tooltip">
-            <strong>MS Computational Science &amp; Engineering</strong><em>NUST · 2018 – 2021</em>
-            <ul><li>Graduated top of the programme with the Gold Medal</li>
-            <li>BS Computer Science, University of Gujrat · Top Project award</li></ul>
-          
-          </div>
-        </li>
-        <li tabindex="0" style="--i:1">
-          <span class="yr">2020</span>
-          <span class="dot"></span>
-          <b>Pakistan Air Force</b><i>2020 – 2021</i>
-          <div class="tip" role="tooltip">
-            <strong>Machine Learning Engineer</strong><em>Islamabad</em>
-            <ul><li>AI detection on 450-megapixel satellite images</li>
-            <li>Mission-critical AI analytics infrastructure</li></ul>
-          
-          </div>
-        </li>
-        <li tabindex="0" style="--i:2">
-          <span class="yr">2021</span>
-          <span class="dot"></span>
-          <b>DARVIS</b><i>2021 – 2024</i>
-          <div class="tip" role="tooltip">
-            <strong>Machine Learning Engineer</strong><em>United States, remote</em>
-            <ul><li>Real-time video analytics, +50% FPS with custom DeepStream plugins</li>
-            <li>One NVIDIA Triton model store for PyTorch, TensorFlow and TensorRT</li>
-            <li>Automated path from training to TensorRT to API</li></ul>
-          
-          </div>
-        </li>
-        <li tabindex="0" class="win" style="--i:3">
-          <span class="yr">2022</span>
-          <span class="dot"></span>
-          <b><a href="https://github.com/wang-xinyu/tensorrtx/pulls?q=is%3Apr+author%3Asbmalik" target="_blank" rel="noopener">Code in open source</a></b><i>TensorRTX · PytorchX · 2022</i>
-          <div class="tip" role="tooltip">
-            <strong>Merged upstream</strong><em>TensorRTX · PytorchX · 2022</em>
-            <ul><li>ArcFace face recognition on TensorRT 8, in TensorRTX</li>
-            <li>MLP example networks in TensorRTX and PytorchX</li>
-            <li>PyCon speaker</li></ul>
-          
-          </div>
-        </li>
-        <li tabindex="0" class="win" style="--i:4">
-          <span class="yr">2023</span>
-          <span class="dot"></span>
-          <b><a href="https://arxiv.org/abs/2303.13055" target="_blank" rel="noopener">Published research</a></b><i>arXiv · 2023</i>
-          <div class="tip" role="tooltip">
-            <strong>Reimagining UI Design using Deep Learning</strong><em>arXiv · 2023</em>
-            <ul><li>Challenges and opportunities of deep learning for app interface design</li>
-            <li>ICT Endowment Research &amp; Development Funds award</li></ul>
-          
-          </div>
-        </li>
-        <li tabindex="0" style="--i:5">
-          <span class="yr">2023</span>
-          <span class="dot"></span>
-          <b>AI/ML Consultancy</b><i>2023 – 2025</i>
-          <div class="tip" role="tooltip">
-            <strong>AI/ML Consultant</strong><em>Self-employed · for Rapidev Group & Relymer</em>
-            <ul><li>LangGraph multi-agent systems on AWS Bedrock</li>
-            <li>LoRA/QLoRA fine-tuning, 23× faster LLM inference</li>
-            <li>One serving layer for over 3 million requests a month, $50K a year saved</li></ul>
-          
-          </div>
-        </li>
-        <li tabindex="0" class="now" style="--i:6">
-          <span class="yr">2024</span>
-          <span class="dot"></span>
-          <b>Sigrow</b><i>2024 – now</i>
-          <div class="tip" role="tooltip">
-            <strong>Senior Software Engineer, AI/ML</strong><em>Netherlands</em>
-            <ul><li>Owns the ML serving and data platform</li>
-            <li>20 vision models, 8 million predictions a day, p95 27.2s → 1.25s</li>
-            <li>Real-time data from 5K+ IoT devices</li></ul>
-          
-          </div>
-        </li>
+    <div class="jhead">
+      <h3>Senior AI/ML Engineer</h3>
+      <div class="jnav">
+        <span class="jcount" id="jcount" aria-live="polite"></span>
+        <button class="jbtn" id="jprev" type="button" aria-label="Earlier"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m14.5 6-6 6 6 6"/></svg></button>
+        <button class="jbtn" id="jnext" type="button" aria-label="Later"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9.5 6 6 6-6 6"/></svg></button>
+      </div>
+    </div>
+    <ol class="reel" id="reel" aria-label="Journey, oldest to newest">
+      <li class="still" tabindex="0" data-scene="medal">
+        <canvas class="still__cv" aria-hidden="true"></canvas><div class="still__fade" aria-hidden="true"></div>
+        <div class="still__txt">
+          <span class="still__yr">2018 – 2021</span>
+          <b class="still__nm">Gold Medal</b>
+          <span class="still__ro">MS Computational Science &amp; Engineering · NUST</span>
+          <p class="still__fact">Graduated top of the programme with the Gold Medal, CGPA 4.0 / 4.0. Before that, BS Computer Science at the University of Gujrat with the Top Project award.</p>
+        </div>
+      </li>
+      <li class="still" tabindex="0" data-scene="tiles">
+        <canvas class="still__cv" aria-hidden="true"></canvas><div class="still__fade" aria-hidden="true"></div>
+        <div class="still__txt">
+          <span class="still__yr">2020 – 2021</span>
+          <b class="still__nm">CENTAIC (PAF)</b>
+          <span class="still__ro">Machine Learning Engineer · Islamabad · AIRAF</span>
+          <p class="still__fact">AI detection on 450-megapixel satellite images, 95% accurate on objects under 10 pixels, with 80% less analysis time. Mission-critical work under strict security limits.</p>
+        </div>
+      </li>
+      <li class="still" tabindex="0" data-scene="video">
+        <canvas class="still__cv" aria-hidden="true"></canvas><div class="still__fade" aria-hidden="true"></div>
+        <div class="still__txt">
+          <span class="still__yr">2021 – 2024</span>
+          <b class="still__nm">DARVIS</b>
+          <span class="still__ro">Machine Learning Engineer · United States, remote · OmniRoom</span>
+          <p class="still__fact">Real-time video analytics across 100+ cameras, models running in parallel into one decision layer. +50% FPS from custom DeepStream plugins.</p>
+        </div>
+      </li>
+      <li class="still" tabindex="0" data-scene="commits">
+        <canvas class="still__cv" aria-hidden="true"></canvas><div class="still__fade" aria-hidden="true"></div>
+        <div class="still__txt">
+          <span class="still__yr">2022</span>
+          <b class="still__nm"><a href="https://github.com/wang-xinyu/tensorrtx/pulls?q=is%3Apr+author%3Asbmalik" target="_blank" rel="noopener">OpenSource Contribution</a></b>
+          <span class="still__ro">Merged upstream · TensorRTX · PytorchX</span>
+          <p class="still__fact">ArcFace face recognition on TensorRT 8 in TensorRTX (Aug 2022), plus MLP examples in TensorRTX and PytorchX (Jan 2022). PyCon speaker.</p>
+        </div>
+      </li>
+      <li class="still" tabindex="0" data-scene="wire">
+        <canvas class="still__cv" aria-hidden="true"></canvas><div class="still__fade" aria-hidden="true"></div>
+        <div class="still__txt">
+          <span class="still__yr">2023</span>
+          <b class="still__nm"><a href="https://arxiv.org/abs/2303.13055" target="_blank" rel="noopener">Research Paper</a></b>
+          <span class="still__ro">Reimagining UI Design using Deep Learning · arXiv · first author</span>
+          <p class="still__fact">Challenges and opportunities of deep learning for app interface design. ICT Endowment Research &amp; Development Funds award.</p>
+        </div>
+      </li>
+      <li class="still" tabindex="0" data-scene="graph">
+        <canvas class="still__cv" aria-hidden="true"></canvas><div class="still__fade" aria-hidden="true"></div>
+        <div class="still__txt">
+          <span class="still__yr">2023 – 2025</span>
+          <b class="still__nm">AI/ML Consultancy</b>
+          <span class="still__ro">AI/ML Consultant · for Rapidev Group &amp; OwlSense</span>
+          <p class="still__fact">OwlSense social-media intelligence on a multi-agent harness with local LLMs. 23× faster LLM inference; one serving layer for 100K+ requests a day, $50K a year saved.</p>
+        </div>
+      </li>
+      <li class="still still--now" tabindex="0" data-scene="silicon">
+        <canvas class="still__cv" aria-hidden="true"></canvas><div class="still__fade" aria-hidden="true"></div>
+        <div class="still__txt">
+          <span class="still__yr">2024 – now</span>
+          <b class="still__nm">Sigrow</b>
+          <span class="still__ro">Senior Software Engineer, AI/ML · Netherlands · HortiEngine</span>
+          <p class="still__fact">Owns the ML serving and data platform: 20 vision models, 8 million predictions a day, p95 27.2 s → 1.25 s. 2 million messages a day from 5K+ IoT devices.</p>
+        </div>
+      </li>
     </ol>
   </section>
 
-  <section class="highlights" aria-label="Career highlights">
+  <section class="highlights" id="work" aria-label="Career highlights">
     <h3>Career highlights</h3>
     <ol class="board">
       <li class="card">
@@ -334,7 +310,7 @@
       </li>
       <li class="card">
         <span class="n">02</span>
-        <div class="big">8<small>Million</small></div>
+        <div class="big">8 Million</div>
         <h2>Predictions a day</h2>
         <p>20 vision models on shared GPUs, serving 500+ devices in the field.</p>
       </li>
@@ -352,9 +328,9 @@
       </li>
       <li class="card">
         <span class="n">05</span>
-        <div class="big">+50%</div>
-        <h2>More video per GPU</h2>
-        <p>Custom DeepStream plugins raised real-time video analytics throughput.</p>
+        <div class="big">800+</div>
+        <h2>Objects in one image</h2>
+        <p>Detected in a single frame by a multi-model AI cascade built not to miss any.</p>
       </li>
       <li class="card">
         <span class="n">06</span>
@@ -373,13 +349,296 @@
 
 </div>
 <script>
-/* one rAF loop for the backdrop (from index_claude via index_9) */
 (() => {
+'use strict';
+/* Journey: one film still per era. Each still is a small procedural scene drawn on a canvas,
+   monochrome and slow. One shared rAF loop at ~25 fps, DPR capped at 1.5, stills that are
+   offscreen (or scrolled out of the strip) do not draw, reduced motion = one static frame. */
+const reel = document.getElementById('reel');
+if (!reel) return;
+const stills = Array.from(reel.querySelectorAll('.still'));
+const N = stills.length;
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const DPR = Math.min(window.devicePixelRatio || 1, 1.5);
+const TAU = Math.PI * 2;
+const W = a => 'rgba(237,237,238,' + Math.min(1, Math.max(0, a * 1.25)).toFixed(3) + ')';
+const BG = '#131419';
+const rng = seed => { let a = seed >>> 0; return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; };
+const layer = (w, h, fn) => { const c = document.createElement('canvas'); c.width = Math.max(1, Math.round(w * DPR)); c.height = Math.max(1, Math.round(h * DPR)); const x = c.getContext('2d'); x.setTransform(DPR, 0, 0, DPR, 0, 0); x.lineWidth = 1; fn(x); return c; };
+const bracket = (x, bx, by, bw, bh, l) => { x.beginPath(); x.moveTo(bx, by + l); x.lineTo(bx, by); x.lineTo(bx + l, by); x.moveTo(bx + bw - l, by); x.lineTo(bx + bw, by); x.lineTo(bx + bw, by + l); x.moveTo(bx + bw, by + bh - l); x.lineTo(bx + bw, by + bh); x.lineTo(bx + bw - l, by + bh); x.moveTo(bx + l, by + bh); x.lineTo(bx, by + bh); x.lineTo(bx, by + bh - l); x.stroke(); };
+
+const SCENES = {
+  /* study: a guilloche rosette, the engine-turned pattern of a medal, turning very slowly */
+  medal: {
+    build(w, h) {
+      const cx = w * .74, cy = h * .24;
+      const R = Math.hypot(Math.max(cx, w - cx), Math.max(cy, h - cy)) + 6, S = Math.ceil(R * 2 + 4);
+      const rings = 30, n = 11;
+      const base = layer(S, S, x => {
+        for (let k = 0; k < rings; k++) {
+          const rr = 10 + k * (R - 14) / (rings - 1), amp = 1.8 + k * .14, ph = k * .41;
+          x.beginPath();
+          for (let i = 0; i <= 480; i++) { const th = i / 480 * TAU; const rad = rr + amp * Math.sin(n * th + ph); const px = S / 2 + rad * Math.cos(th), py = S / 2 + rad * Math.sin(th); i ? x.lineTo(px, py) : x.moveTo(px, py); }
+          x.closePath(); x.strokeStyle = W(.12 - .10 * (k / (rings - 1))); x.stroke();
+        }
+      });
+      return { base, cx, cy, S };
+    },
+    frame(ctx, w, h, t, s) {
+      ctx.clearRect(0, 0, w, h);
+      ctx.save(); ctx.translate(s.cx, s.cy); ctx.rotate(t * .02); ctx.drawImage(s.base, -s.S / 2, -s.S / 2, s.S, s.S); ctx.restore();
+    }
+  },
+  /* satellite imagery: a mosaic of tiles, a few with detection brackets, a slow scan passing over them */
+  tiles: {
+    build(w, h, r) {
+      const cols = Math.max(8, Math.round(w / 27)), rows = Math.max(4, Math.round(h / 27));
+      const tw = w / cols, th = h / rows, tiles = [];
+      for (let j = 0; j < rows; j++) for (let i = 0; i < cols; i++) tiles.push({ i, j, b: r() * r(), det: r() < .055 });
+      const base = layer(w, h, x => {
+        for (const tl of tiles) { x.fillStyle = W(.012 + tl.b * .07); x.fillRect(tl.i * tw + .5, tl.j * th + .5, tw - 1, th - 1); }
+        x.strokeStyle = W(.42);
+        for (const tl of tiles) if (tl.det) bracket(x, tl.i * tw + 4.5, tl.j * th + 4.5, tw - 9, th - 9, 4);
+      });
+      return { base, tiles, tw, th };
+    },
+    frame(ctx, w, h, t, s) {
+      ctx.clearRect(0, 0, w, h); ctx.drawImage(s.base, 0, 0, w, h);
+      const sx = ((t * .04) % 1.25) * (w * 1.25) - w * .1;
+      for (const tl of s.tiles) {
+        const d = (sx - (tl.i + .5) * s.tw) / (s.tw * 4);
+        if (d > -.08 && d < 1) { const a = d < 0 ? (1 + d * 12.5) * .09 : (1 - d) * .09; if (a > 0) { ctx.fillStyle = W(a); ctx.fillRect(tl.i * s.tw + .5, tl.j * s.th + .5, s.tw - 1, s.th - 1); } }
+      }
+      if (sx > 0 && sx < w) { ctx.fillStyle = W(.14); ctx.fillRect(Math.round(sx), 0, 1, h); }
+    }
+  },
+  /* video analytics: a lattice of frames with scanlines and tracked boxes, a playhead moving row by row */
+  video: {
+    build(w, h, r) {
+      const fw = 52, fh = 30, g = 8, cols = Math.ceil(w / (fw + g)) + 1, rows = Math.ceil(h / (fh + g)) + 1, frames = [];
+      for (let j = 0; j < rows; j++) for (let i = 0; i < cols; i++) frames.push({ x: i * (fw + g) - g / 2, y: j * (fh + g) - g / 2, box: r() < .4 ? { x: .1 + r() * .45, y: .1 + r() * .35, w: .2 + r() * .3, h: .3 + r() * .35 } : null });
+      const base = layer(w, h, x => {
+        for (const f of frames) {
+          x.strokeStyle = W(.08); x.strokeRect(f.x + .5, f.y + .5, fw, fh);
+          x.fillStyle = W(.03); for (let y = f.y + 3; y < f.y + fh - 1; y += 3) x.fillRect(f.x + 1, y, fw - 1, 1);
+          if (f.box) { x.strokeStyle = W(.2); x.strokeRect(Math.round(f.x + f.box.x * fw) + .5, Math.round(f.y + f.box.y * fh) + .5, Math.round(f.box.w * fw), Math.round(f.box.h * fh)); }
+        }
+      });
+      return { base, frames, fw, fh, g, cols, rows };
+    },
+    frame(ctx, w, h, t, s) {
+      ctx.clearRect(0, 0, w, h); ctx.drawImage(s.base, 0, 0, w, h);
+      const per = 7, rt = (t / per) % s.rows, j = Math.floor(rt), u = rt - j;
+      const px = u * w, y = j * (s.fh + s.g) - s.g / 2;
+      const i = Math.floor((px + s.g / 2) / (s.fw + s.g)), f = s.frames[j * s.cols + i];
+      if (f) { ctx.fillStyle = W(.05); ctx.fillRect(f.x + 1, f.y + 1, s.fw - 1, s.fh - 1); }
+      ctx.fillStyle = W(.16); ctx.fillRect(Math.round(px), y - 3, 1, s.fh + 6);
+    }
+  },
+  /* open source: a commit graph, branches leaving the main line and merging back, one pulse along the line */
+  commits: {
+    build(w, h, r) {
+      const y0 = Math.round(h * .36) + .5, lanes = [h * .17, h * .56, h * .74];
+      const main = []; for (let x = 12 + r() * 10; x < w - 6; x += 17 + r() * 18) main.push(Math.round(x) + .5);
+      const branches = [];
+      for (let i = 1; i < main.length - 2 && branches.length < 4; i++) {
+        if (r() < .4) {
+          const j = Math.min(main.length - 1, i + 2 + Math.floor(r() * 3)), y = Math.round(lanes[branches.length % lanes.length]) + .5, pts = [];
+          for (let q = i + 1; q < j; q++) pts.push(main[q] - 6 + Math.round(r() * 12));
+          branches.push({ a: main[i], b: main[j], y, pts }); i = j;
+        }
+      }
+      const dot = (x, px, py, a) => { x.beginPath(); x.arc(px, py, 2.2, 0, TAU); x.fillStyle = BG; x.fill(); x.strokeStyle = W(a); x.stroke(); };
+      const base = layer(w, h, x => {
+        x.strokeStyle = W(.16); x.beginPath(); x.moveTo(0, y0); x.lineTo(w, y0); x.stroke();
+        for (const b of branches) {
+          x.strokeStyle = W(.14); x.beginPath(); x.moveTo(b.a, y0); x.bezierCurveTo(b.a + 14, y0, b.a + 2, b.y, b.a + 16, b.y); x.lineTo(b.b - 16, b.y); x.bezierCurveTo(b.b - 2, b.y, b.b - 14, y0, b.b, y0); x.stroke();
+          for (const px of b.pts) dot(x, px, b.y, .36);
+        }
+        for (const px of main) dot(x, px, y0, .46);
+      });
+      return { base, y0 };
+    },
+    frame(ctx, w, h, t, s) {
+      ctx.clearRect(0, 0, w, h); ctx.drawImage(s.base, 0, 0, w, h);
+      const px = ((t * 13) % (w + 70)) - 35;
+      const g = ctx.createLinearGradient(px - 44, 0, px, 0); g.addColorStop(0, W(0)); g.addColorStop(1, W(.5));
+      ctx.fillStyle = g; ctx.fillRect(px - 44, s.y0 - .5, 44, 1);
+      ctx.beginPath(); ctx.arc(px, s.y0, 2.2, 0, TAU); ctx.fillStyle = W(.85); ctx.fill();
+    }
+  },
+  /* research on UI design: a row of wireframed screens, one element at a time re-proposed */
+  wire: {
+    build(w, h, r) {
+      const sw = 60, gap = 18, n = Math.max(3, Math.floor((w - 24) / (sw + gap))), x0 = Math.round((w - n * (sw + gap) + gap) / 2), sh = h + 20, els = [], screens = [];
+      for (let k = 0; k < n; k++) {
+        const sx = x0 + k * (sw + gap), sy = 12; screens.push({ x: sx, y: sy });
+        let y = sy + 8;
+        els.push({ x: sx + 6, y, w: sw - 12, h: 6, f: true }); y += 12;
+        if (r() < .7) { const hh = Math.round(18 + r() * 14); els.push({ x: sx + 6, y, w: sw - 12, h: hh }); y += hh + 8; }
+        const lines = 2 + Math.floor(r() * 3); for (let q = 0; q < lines; q++) { els.push({ x: sx + 6, y, w: Math.round((sw - 12) * (.5 + r() * .5)), h: 2, f: true }); y += 6; } y += 6;
+        if (r() < .8) { const cols = r() < .5 ? 2 : 3, cw = Math.floor((sw - 12 - (cols - 1) * 4) / cols); for (let c = 0; c < cols; c++) els.push({ x: sx + 6 + c * (cw + 4), y, w: cw, h: 14 }); y += 22; }
+        els.push({ x: sx + 6, y, w: sw - 12, h: 8 }); y += 14;
+        for (let q = 0; q < 3; q++) { els.push({ x: sx + 6, y, w: Math.round((sw - 12) * (.4 + r() * .6)), h: 2, f: true }); y += 6; }
+      }
+      const base = layer(w, h, x => {
+        x.strokeStyle = W(.13); for (const s of screens) x.strokeRect(s.x + .5, s.y + .5, sw, sh);
+        for (const e of els) { if (e.f) { x.fillStyle = W(.09); x.fillRect(e.x, e.y, e.w, e.h); } else { x.strokeStyle = W(.15); x.strokeRect(e.x + .5, e.y + .5, e.w, e.h); } }
+      });
+      return { base, els };
+    },
+    frame(ctx, w, h, t, s) {
+      ctx.clearRect(0, 0, w, h); ctx.drawImage(s.base, 0, 0, w, h);
+      const per = 1.8, k = Math.floor(t / per), u = t / per - k, e = s.els[(k * 7 + 3) % s.els.length];
+      const a = u < .25 ? u / .25 : (1 - u) / .75;
+      ctx.strokeStyle = W(.5 * a); ctx.strokeRect(e.x - .5, e.y - .5, e.w + 2, e.h + 2);
+    }
+  },
+  /* consultancy: a graph of agents and services, a few messages travelling along its edges */
+  graph: {
+    build(w, h, r) {
+      const n = Math.max(12, Math.round(w / 20)), nodes = [], edges = [];
+      for (let i = 0; i < n; i++) nodes.push({ x: 16 + r() * (w - 32), y: 12 + r() * (h - 24) });
+      nodes.forEach((a, i) => {
+        nodes.map((b, j) => ({ j, d: Math.hypot(a.x - b.x, a.y - b.y) })).filter(o => o.j !== i).sort((p, q) => p.d - q.d).slice(0, 2)
+          .forEach(o => { if (!edges.some(e => (e.a === i && e.b === o.j) || (e.a === o.j && e.b === i))) edges.push({ a: i, b: o.j, len: o.d }); });
+      });
+      const base = layer(w, h, x => {
+        x.strokeStyle = W(.11); for (const e of edges) { x.beginPath(); x.moveTo(nodes[e.a].x, nodes[e.a].y); x.lineTo(nodes[e.b].x, nodes[e.b].y); x.stroke(); }
+        for (const nd of nodes) { x.beginPath(); x.arc(nd.x, nd.y, 2.3, 0, TAU); x.fillStyle = BG; x.fill(); x.strokeStyle = W(.4); x.stroke(); }
+      });
+      const packets = []; for (let i = 0; i < 4; i++) packets.push({ e: Math.floor(r() * edges.length), u: r(), dir: r() < .5 ? 1 : -1, v: 9 + r() * 7 });
+      return { base, nodes, edges, packets, r };
+    },
+    frame(ctx, w, h, t, s, dt) {
+      ctx.clearRect(0, 0, w, h); ctx.drawImage(s.base, 0, 0, w, h);
+      for (const p of s.packets) {
+        const e = s.edges[p.e]; p.u += p.dir * p.v * (dt || 0) / Math.max(1, e.len);
+        if (p.u > 1 || p.u < 0) {
+          const node = p.u > 1 ? e.b : e.a;
+          const next = s.edges.map((ee, k) => ({ ee, k })).filter(o => o.k !== p.e && (o.ee.a === node || o.ee.b === node));
+          if (next.length) { const o = next[Math.floor(s.r() * next.length)]; p.e = o.k; p.dir = o.ee.a === node ? 1 : -1; p.u = p.dir === 1 ? 0 : 1; }
+          else { p.dir *= -1; p.u = Math.min(1, Math.max(0, p.u)); }
+        }
+        const e2 = s.edges[p.e], a = s.nodes[e2.a], b = s.nodes[e2.b];
+        ctx.beginPath(); ctx.arc(a.x + (b.x - a.x) * p.u, a.y + (b.y - a.y) * p.u, 1.7, 0, TAU); ctx.fillStyle = W(.75); ctx.fill();
+      }
+    }
+  },
+  /* Sigrow: silicon. Manhattan routing traces, denser inside the blocks, a glint running along the long ones */
+  silicon: {
+    build(w, h, r) {
+      const pitch = 9, rows = Math.ceil(h / pitch);
+      const blocks = [{ x: w * .55, y: h * .08, w: w * .24, h: h * .46 }, { x: w * .12, y: h * .46, w: w * .22, h: h * .4 }, { x: w * .84, y: h * .6, w: w * .13, h: h * .3 }].map(b => ({ x: Math.round(b.x), y: Math.round(b.y), w: Math.round(b.w), h: Math.round(b.h) }));
+      const segs = [], vias = [], vs = [];
+      for (let j = 0; j < rows; j++) {
+        const y = j * pitch + 5; let x = -r() * 40;
+        while (x < w) {
+          const len = Math.round(30 + r() * 110), mid = x + len / 2;
+          const inB = blocks.some(b => y > b.y && y < b.y + b.h && mid > b.x && mid < b.x + b.w);
+          if (r() < (inB ? .85 : .3)) { const s = { x: Math.round(x), y, len, a: inB ? .10 + .09 * r() : .05 + .05 * r(), wide: r() < .15 }; segs.push(s); if (r() < .3) vias.push({ x: s.x + len - 2, y: y - 1.5 }); }
+          x += len + 6 + r() * 16;
+        }
+      }
+      for (let i = 0; i < Math.round(w / 12); i++) { const x = Math.floor(r() * w) + .5, y0 = Math.floor(r() * rows) * pitch + 5; vs.push({ x, y0, y1: y0 + (1 + Math.floor(r() * 3)) * pitch, a: .05 + .06 * r() }); }
+      const base = layer(w, h, x => {
+        for (const s of segs) { x.fillStyle = W(s.a); x.fillRect(s.x, s.y - (s.wide ? 1.5 : .5), s.len, s.wide ? 3 : 1); }
+        for (const v of vs) { x.fillStyle = W(v.a); x.fillRect(v.x - .5, v.y0, 1, v.y1 - v.y0); }
+        x.strokeStyle = W(.15); for (const b of blocks) x.strokeRect(b.x + .5, b.y + .5, b.w, b.h);
+        x.fillStyle = W(.24); for (const v of vias) x.fillRect(v.x, v.y, 3, 3);
+      });
+      const long = segs.filter(s => s.len > 85);
+      const glints = []; for (let i = 0; i < Math.min(6, long.length); i++) glints.push({ s: long[Math.floor(i * long.length / Math.min(6, long.length))], ph: i / 6 });
+      return { base, glints };
+    },
+    frame(ctx, w, h, t, s) {
+      ctx.clearRect(0, 0, w, h); ctx.drawImage(s.base, 0, 0, w, h);
+      for (const g of s.glints) {
+        const u = (t * .05 + g.ph) % 1, x = g.s.x + u * g.s.len;
+        const gr = ctx.createLinearGradient(x - 26, 0, x + 2, 0); gr.addColorStop(0, W(0)); gr.addColorStop(1, W(.55));
+        ctx.fillStyle = gr; ctx.fillRect(Math.max(g.s.x, x - 26), g.s.y - .5, Math.min(28, x - g.s.x + 2), 1);
+      }
+    }
+  }
+};
+
+/* ---- one loop for every still ---- */
+const active = new Set();
+let raf = 0, lastDraw = 0;
+function loop(now) {
+  raf = 0;
+  if (!active.size || document.hidden) return;
+  if (now - lastDraw >= 36) { const dt = lastDraw ? Math.min(.1, (now - lastDraw) / 1000) : .04; lastDraw = now; for (const p of active) p.draw(now / 1000, dt); }
+  raf = requestAnimationFrame(loop);
+}
+function kick() { if (!raf && !reduced && active.size && !document.hidden) raf = requestAnimationFrame(loop); }
+document.addEventListener('visibilitychange', () => { if (document.hidden) { cancelAnimationFrame(raf); raf = 0; } else { lastDraw = 0; kick(); } });
+
+const panels = new Map();
+stills.forEach((li, idx) => {
+  const cv = li.querySelector('canvas'), scene = SCENES[li.dataset.scene];
+  if (!cv || !scene) return;
+  const ctx = cv.getContext('2d');
+  let w = 0, h = 0, st = null;
+  const t0 = idx * 5.17;
+  const p = {
+    on: false,
+    size() {
+      const r = li.getBoundingClientRect(), nw = Math.round(r.width), nh = Math.round(r.height);
+      if (!nw || !nh || (nw === w && nh === h)) return;
+      w = nw; h = nh; cv.width = Math.round(w * DPR); cv.height = Math.round(h * DPR);
+      ctx.setTransform(DPR, 0, 0, DPR, 0, 0); ctx.lineWidth = 1;
+      st = scene.build(w, h, rng(97 + idx * 131));
+      p.draw(t0, 0);
+    },
+    draw(t, dt) { if (!st) return; scene.frame(ctx, w, h, t + t0, st, dt); if (!p.on) { p.on = true; cv.classList.add('is-on'); } }
+  };
+  panels.set(li, p);
+});
+const io = new IntersectionObserver(es => {
+  for (const e of es) { const p = panels.get(e.target); if (!p) continue; if (e.isIntersecting) { p.size(); active.add(p); } else active.delete(p); }
+  kick();
+}, { threshold: .02 });
+panels.forEach((p, li) => io.observe(li));
+if ('ResizeObserver' in window) { const ro = new ResizeObserver(() => panels.forEach(p => { if (active.has(p)) p.size(); })); panels.forEach((p, li) => ro.observe(li)); }
+
+/* ---- strip navigation: arrows, counter, keyboard ---- */
+const prev = document.getElementById('jprev'), next = document.getElementById('jnext'), cnt = document.getElementById('jcount');
+const step = () => stills[1] ? stills[1].offsetLeft - stills[0].offsetLeft : stills[0].offsetWidth;
+let queued = false;
+function update() {
+  queued = false;
+  const s = step(), max = reel.scrollWidth - reel.clientWidth;
+  const first = Math.min(N - 1, Math.max(0, Math.round(reel.scrollLeft / s)));
+  const vis = Math.max(1, Math.round((reel.clientWidth + 2) / s));
+  const last = Math.min(N, first + vis);
+  cnt.textContent = vis > 1 ? (first + 1) + ' – ' + last + ' of ' + N : (first + 1) + ' of ' + N;
+  prev.disabled = reel.scrollLeft <= 1; next.disabled = reel.scrollLeft >= max - 1;
+}
+reel.addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(update); } }, { passive: true });
+const go = d => reel.scrollBy({ left: d * step(), behavior: reduced ? 'auto' : 'smooth' });
+prev.addEventListener('click', () => go(-1));
+next.addEventListener('click', () => go(1));
+reel.addEventListener('keydown', e => { if (e.key === 'ArrowRight') { go(1); e.preventDefault(); } else if (e.key === 'ArrowLeft') { go(-1); e.preventDefault(); } });
+let rz = 0; addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(update, 120); }, { passive: true });
+reel.scrollLeft = reel.scrollWidth;   /* newest at the right, in view first */
+update();
+})();
+</script>
+<script>
+/* ---------------- page: ticker, CTA arrows, intro, "See the work" (index_claude) ---------------- */
+(() => {
+'use strict';
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 const clamp01 = x => x < 0 ? 0 : x > 1 ? 1 : x;
+const lerp = (a, b, t) => a + (b - a) * t;
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const coarse = matchMedia('(pointer: coarse)').matches;
 const finePtr = matchMedia('(hover: hover) and (pointer: fine)').matches;
 const mqDesk = matchMedia('(min-width: 981px)');
+
+/* one rAF loop for the whole page */
 const ticker = {
   fns: new Set(), raf: 0, last: 0, inLoop: false,
   add(fn) { this.fns.add(fn); this.start(); },
@@ -397,7 +656,8 @@ const ticker = {
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) { cancelAnimationFrame(ticker.raf); ticker.raf = 0; } else ticker.start();
 });
-window.__site = { ticker, reduced, coarse, finePtr, mqDesk, clamp01 };
+
+window.__site = { ticker, reduced, coarse, finePtr, mqDesk, clamp01, lerp };
 })();
 </script>
 <script>
