@@ -6,7 +6,7 @@
 <title>SB Malik Portfolio</title>
 <link rel="icon" type="image/png" href="img/logo_icon.png" media="(prefers-color-scheme: light)">
 <link rel="icon" type="image/png" href="img/logo-white.png" media="(prefers-color-scheme: dark)">
-<meta name="description" content="Subtain Malik, Senior AI/ML Engineer in the Netherlands. Six results from putting machine learning into production.">
+<meta name="description" content="Subtain Malik, Senior AI/ML Engineer in the Netherlands. Five results from putting machine learning into production.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500&family=Inter:opsz,wght@14..32,400;14..32,500&display=swap" rel="stylesheet">
@@ -51,14 +51,14 @@
 
   /* board */
   .highlights{align-self:start;padding:clamp(22px,3.5vh,36px) 0 clamp(12px,3vh,40px)}
-  .board{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));margin:0;padding:0;list-style:none}
+  .board{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));margin:0;padding:0;list-style:none}
   .card{display:flex;flex-direction:column;padding:clamp(14px,2.6vh,30px) clamp(18px,1.6vw,30px);
     border-left:1px solid var(--rule);opacity:0;transform:translateY(8px);
     animation:rise 1.2s cubic-bezier(.2,.7,.2,1) forwards}
   .card:first-child{border-left:0;padding-left:0}
   .card:last-child{padding-right:0}
   .card:nth-child(2){animation-delay:.08s}.card:nth-child(3){animation-delay:.16s}
-  .card:nth-child(4){animation-delay:.24s}.card:nth-child(5){animation-delay:.32s}.card:nth-child(6){animation-delay:.4s}
+  .card:nth-child(4){animation-delay:.24s}.card:nth-child(5){animation-delay:.32s}
   @keyframes rise{to{opacity:1;transform:none}}
   .n{font-size:11px;font-weight:500;letter-spacing:.04em;color:var(--faint);font-variant-numeric:tabular-nums}
   .big{margin:clamp(10px,1.6vh,16px) 0 0;font-family:var(--heading);font-weight:300;font-size:clamp(36px,3.3vw,52px);line-height:1;
@@ -330,15 +330,9 @@
       </li>
       <li class="card">
         <span class="n">05</span>
-        <div class="big">800+</div>
-        <h2>Objects in one image</h2>
-        <p>Detected in a single frame by a multi-model AI cascade built not to miss any.</p>
-      </li>
-      <li class="card">
-        <span class="n">06</span>
-        <div class="big">450<small>MP</small></div>
-        <h2>Seen from orbit</h2>
-        <p>AI detection on huge satellite images, 15,000 × 30,000 pixels each.</p>
+        <div class="big">450 Million</div>
+        <h2>Pixels per image</h2>
+        <p>AI detection on satellite images, each the size of 217 Full HD screens.</p>
       </li>
     </ol>
   </section>
