@@ -89,9 +89,22 @@
   }
   /* journey: a strip of film stills, newest at the right */
   .journey{padding:clamp(14px,2vh,18px) 0 clamp(16px,2.2vh,20px);border-bottom:1px solid var(--rule)}
-  .jhead{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:8px}
-  .jhead h3{margin:0}
-  .jnav{display:flex;align-items:center;gap:6px}
+  .jtitle{margin:0 0 10px}
+  /* two strips side by side: work experience (three across) and other achievements (one across), same still size */
+  .jgrid{display:grid;grid-template-columns:3fr 1fr;gap:0 48px}
+  .jcol{min-width:0}
+  .jhead{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:8px}
+  .jlab{font-size:11px;font-weight:500;letter-spacing:.04em;color:var(--dim)}
+  @media (min-width:1200px){
+    /* exactly three stills (and one) at a time, with clear gaps; no half-cut still, so no edge fade */
+    .journey .reel{--gap:12px}
+    .jgrid{grid-template-columns:minmax(0,1fr) calc((100% - 48px - 24px) / 4)}   /* right column = one still, so all four stills match */
+    .jcol--work .reel{--n:3}
+    .jcol--other .reel{--n:1}
+    .journey .reel.fade-r,.journey .reel.fade-l{--fr:0px;--fl:0px}
+    .journey .still{aspect-ratio:auto;height:clamp(148px,17.6vh,176px)}
+  }
+  @media (max-width:1199px){.jgrid{grid-template-columns:1fr;gap:18px}}
   .jcount{font-size:11px;font-weight:500;letter-spacing:.04em;color:var(--faint);font-variant-numeric:tabular-nums;white-space:nowrap}
   /* carousel arrows sit half outside the strip, centred on its edges, clear of the text; the one with nowhere to go fades out */
   .reelwrap{position:relative}
@@ -120,12 +133,12 @@
   .still__cv.is-on{opacity:.8}
   /* hover: the fact opens to its full length and the scene steps back behind a deeper shade, so the
      taller text block always sits on a clean surface; the panel itself never changes size */
-  .still:hover .still__cv.is-on,.still:focus-visible .still__cv.is-on,.still:focus-within .still__cv.is-on{opacity:.38;transition-duration:.45s}
+  .still:hover .still__cv.is-on,.still:focus-visible .still__cv.is-on,.still:has(:focus-visible) .still__cv.is-on{opacity:.38;transition-duration:.45s}
   .still__fade{position:absolute;inset:0;pointer-events:none;
     background:linear-gradient(180deg,rgba(14,15,18,0) 0%,rgba(14,15,18,.1) 28%,rgba(14,15,18,.66) 60%,rgba(14,15,18,.92) 100%)}
   .still__fade::after{content:"";position:absolute;inset:0;opacity:0;transition:opacity .45s var(--ease);
     background:linear-gradient(180deg,rgba(14,15,18,.35) 0%,rgba(14,15,18,.8) 30%,rgba(14,15,18,.94) 100%)}
-  .still:hover .still__fade::after,.still:focus-visible .still__fade::after,.still:focus-within .still__fade::after{opacity:1}
+  .still:hover .still__fade::after,.still:focus-visible .still__fade::after,.still:has(:focus-visible) .still__fade::after{opacity:1}
   .still__txt{position:absolute;left:0;right:0;bottom:0;z-index:1;padding:12px 18px 12px}
   .still__yr{display:block;font-size:11px;font-weight:500;letter-spacing:.04em;color:var(--faint);font-variant-numeric:tabular-nums}
   .still--now .still__yr{color:var(--accent)}
@@ -135,11 +148,11 @@
   .still__ro a{color:inherit}
   .still__ro a:hover,.still__ro a:focus-visible{color:var(--accent)}
   .still__ro{display:block;margin-top:3px;font-size:12px;line-height:1.35;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .still:hover .still__ro,.still:focus-visible .still__ro,.still:focus-within .still__ro{white-space:normal}
+  .still:hover .still__ro,.still:focus-visible .still__ro,.still:has(:focus-visible) .still__ro{white-space:normal}
   .still__fact{margin:5px 0 0;font-size:12.5px;line-height:1.4;color:var(--soft);
     display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:1;overflow:hidden;
     max-height:1.4em;transition:max-height .5s var(--ease)}
-  .still:hover .still__fact,.still:focus-visible .still__fact,.still:focus-within .still__fact{-webkit-line-clamp:3;max-height:4.2em}
+  .still:hover .still__fact,.still:focus-visible .still__fact,.still:has(:focus-visible) .still__fact{-webkit-line-clamp:3;max-height:4.2em}
   @media (max-width:1199px){.reel{--n:2.35}.still{aspect-ratio:2.2/1}}
   @media (max-width:759px){
     .top{flex-direction:column;align-items:stretch}
@@ -178,7 +191,7 @@
     .built__k{grid-column:1/-1;justify-self:start;margin-bottom:2px}
     .built__w{zoom:.8}
   }
-  @media print{.jnav,.jbtn{display:none}.reel{overflow:visible;flex-wrap:wrap;-webkit-mask-image:none;mask-image:none}.still__fact{max-height:none}}
+  @media print{.jbtn{display:none}.reel{overflow:visible;flex-wrap:wrap;-webkit-mask-image:none;mask-image:none}.still__fact{max-height:none}}
   .page{position:relative;z-index:2}
   @media (max-height:860px) and (min-width:760px){.highlights{padding-top:16px;padding-bottom:6px}.card{padding-top:10px;padding-bottom:10px}}
   /* portrait: no frame. The bust stands on the header's hairline, lit by a faint cool halo */
@@ -242,16 +255,14 @@
   </header>
 
   <section class="journey" aria-label="Journey">
-    <div class="jhead">
-      <h3>Senior AI/ML Engineer</h3>
-      <div class="jnav">
-        <span class="jcount" id="jcount" aria-live="polite"></span>
-      </div>
-    </div>
-    <div class="reelwrap">
-      <button class="jbtn jbtn--prev" id="jprev" type="button" aria-label="Newer"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m14.5 6-6 6 6 6"/></svg></button>
-      <button class="jbtn jbtn--next" id="jnext" type="button" aria-label="Older"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9.5 6 6 6-6 6"/></svg></button>
-    <ol class="reel" id="reel" aria-label="Journey, newest to oldest">
+    <h3 class="jtitle">Senior AI/ML Engineer</h3>
+    <div class="jgrid">
+    <div class="jcol jcol--work">
+      <div class="jhead"><span class="jlab">Work experience</span><span class="jcount" aria-live="polite"></span></div>
+      <div class="reelwrap">
+        <button class="jbtn jbtn--prev" type="button" aria-label="Newer"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m14.5 6-6 6 6 6"/></svg></button>
+        <button class="jbtn jbtn--next" type="button" aria-label="Older"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9.5 6 6 6-6 6"/></svg></button>
+      <ol class="reel" aria-label="Work experience, newest to oldest">
       <li class="still still--now" tabindex="0" data-scene="silicon">
         <canvas class="still__cv" aria-hidden="true"></canvas><div class="still__fade" aria-hidden="true"></div>
         <div class="still__txt">
@@ -268,24 +279,6 @@
           <b class="still__nm">AI/ML Consultant</b>
           <span class="still__ro">For <a href="https://rapidev.com" target="_blank" rel="noopener">Rapidev Group</a> &amp; <a href="https://relymer.com" target="_blank" rel="noopener">Relymer</a></span>
           <p class="still__fact">OwlSense social-media intelligence on a multi-agent harness with local LLMs. 23× faster LLM inference; one serving layer for 100K+ requests a day, $50K a year saved.</p>
-        </div>
-      </li>
-      <li class="still" tabindex="0" data-scene="wire">
-        <canvas class="still__cv" aria-hidden="true"></canvas><div class="still__fade" aria-hidden="true"></div>
-        <div class="still__txt">
-          <span class="still__yr">2023</span>
-          <b class="still__nm"><a href="https://arxiv.org/abs/2303.13055" target="_blank" rel="noopener">Research Paper</a></b>
-          <span class="still__ro">Reimagining UI Design using Deep Learning · arXiv · first author</span>
-          <p class="still__fact">Challenges and opportunities of deep learning for app interface design. ICT Endowment Research &amp; Development Funds award.</p>
-        </div>
-      </li>
-      <li class="still" tabindex="0" data-scene="commits">
-        <canvas class="still__cv" aria-hidden="true"></canvas><div class="still__fade" aria-hidden="true"></div>
-        <div class="still__txt">
-          <span class="still__yr">2022</span>
-          <b class="still__nm"><a href="https://github.com/wang-xinyu/tensorrtx/pulls?q=is%3Apr+author%3Asbmalik" target="_blank" rel="noopener">OpenSource Contribution</a></b>
-          <span class="still__ro">Merged upstream · TensorRTX · PytorchX</span>
-          <p class="still__fact">ArcFace face recognition on TensorRT 8 in TensorRTX (Aug 2022), plus MLP examples in TensorRTX and PytorchX (Jan 2022). PyCon speaker.</p>
         </div>
       </li>
       <li class="still" tabindex="0" data-scene="video">
@@ -306,6 +299,42 @@
           <p class="still__fact">AI detection on 450-megapixel satellite images, 95% accurate on objects under 10 pixels, with 80% less analysis time. Mission-critical work under strict security limits.</p>
         </div>
       </li>
+      </ol>
+      </div>
+    </div>
+    <div class="jcol jcol--other">
+      <div class="jhead"><span class="jlab">Other achievements</span><span class="jcount" aria-live="polite"></span></div>
+      <div class="reelwrap">
+        <button class="jbtn jbtn--prev" type="button" aria-label="Newer"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m14.5 6-6 6 6 6"/></svg></button>
+        <button class="jbtn jbtn--next" type="button" aria-label="Older"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9.5 6 6 6-6 6"/></svg></button>
+      <ol class="reel" aria-label="Other achievements, newest to oldest">
+      <li class="still" tabindex="0" data-scene="streams">
+        <canvas class="still__cv" aria-hidden="true"></canvas><div class="still__fade" aria-hidden="true"></div>
+        <div class="still__txt">
+          <span class="still__yr">2024</span>
+          <b class="still__nm"><a href="https://www.youtube.com/watch?v=-vUoondnf-8" target="_blank" rel="noopener">PyCon Talk</a></b>
+          <span class="still__ro">Python and the Multiverse of Cameras · PyCon Pakistan</span>
+          <p class="still__fact">A tale of synchronization and streams, on stage at PyCon Pakistan 2024. The talk is on YouTube.</p>
+        </div>
+      </li>
+      <li class="still" tabindex="0" data-scene="wire">
+        <canvas class="still__cv" aria-hidden="true"></canvas><div class="still__fade" aria-hidden="true"></div>
+        <div class="still__txt">
+          <span class="still__yr">2023</span>
+          <b class="still__nm"><a href="https://arxiv.org/abs/2303.13055" target="_blank" rel="noopener">Research Paper</a></b>
+          <span class="still__ro">Reimagining UI Design using Deep Learning · arXiv · first author</span>
+          <p class="still__fact">Challenges and opportunities of deep learning for app interface design. ICT Endowment Research &amp; Development Funds award.</p>
+        </div>
+      </li>
+      <li class="still" tabindex="0" data-scene="commits">
+        <canvas class="still__cv" aria-hidden="true"></canvas><div class="still__fade" aria-hidden="true"></div>
+        <div class="still__txt">
+          <span class="still__yr">2022</span>
+          <b class="still__nm"><a href="https://github.com/wang-xinyu/tensorrtx/pulls?q=is%3Apr+author%3Asbmalik" target="_blank" rel="noopener">OpenSource Contribution</a></b>
+          <span class="still__ro">Merged upstream · TensorRTX · PytorchX</span>
+          <p class="still__fact">ArcFace face recognition on TensorRT 8 in TensorRTX (Aug 2022), plus MLP examples in TensorRTX and PytorchX (Jan 2022).</p>
+        </div>
+      </li>
       <li class="still" tabindex="0" data-scene="medal">
         <canvas class="still__cv" aria-hidden="true"></canvas><div class="still__fade" aria-hidden="true"></div>
         <div class="still__txt">
@@ -315,7 +344,9 @@
           <p class="still__fact">Graduated top of the programme with the Gold Medal, CGPA 4.0 / 4.0. Before that, BS Computer Science at the University of Gujrat with the Top Project award.</p>
         </div>
       </li>
-    </ol>
+      </ol>
+      </div>
+    </div>
     </div>
   </section>
 
@@ -363,10 +394,10 @@
 /* Journey: one film still per era. Each still is a small procedural scene drawn on a canvas,
    monochrome and slow. One shared rAF loop at ~25 fps, DPR capped at 1.5, stills that are
    offscreen (or scrolled out of the strip) do not draw, reduced motion = one static frame. */
-const reel = document.getElementById('reel');
-if (!reel) return;
-const stills = Array.from(reel.querySelectorAll('.still'));
-const N = stills.length;
+const reels = Array.from(document.querySelectorAll('.journey .reel'));
+if (!reels.length) return;
+const stills = Array.from(document.querySelectorAll('.journey .still'));
+const ORDER = ['medal', 'tiles', 'video', 'commits', 'wire', 'graph', 'silicon', 'streams'];   /* oldest first: fixes each scene's seed */
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const DPR = Math.min(window.devicePixelRatio || 1, 1.5);
 const TAU = Math.PI * 2;
@@ -442,6 +473,25 @@ const SCENES = {
       const i = Math.floor((px + s.g / 2) / (s.fw + s.g)), f = s.frames[j * s.cols + i];
       if (f) { ctx.fillStyle = W(.05); ctx.fillRect(f.x + 1, f.y + 1, s.fw - 1, s.fh - 1); }
       ctx.fillStyle = W(.16); ctx.fillRect(Math.round(px), y - 3, 1, s.fh + 6);
+    }
+  },
+  /* PyCon talk, many cameras in sync: frame ticks on parallel streams, each at its own rate, drifting past one sync line */
+  streams: {
+    build(w, h, r) {
+      const lanes = [];
+      for (let i = 0; i < 5; i++) { const p = 15 + r() * 9; lanes.push({ y: Math.round(h * (.08 + i * .075)) + .5, p, ph: r() * p }); }
+      const base = layer(w, h, x => { x.strokeStyle = W(.07); for (const l of lanes) { x.beginPath(); x.moveTo(0, l.y); x.lineTo(w, l.y); x.stroke(); } });
+      return { base, lanes, sx: Math.round(w * .66) + .5 };
+    },
+    frame(ctx, w, h, t, s) {
+      ctx.clearRect(0, 0, w, h); ctx.drawImage(s.base, 0, 0, w, h);
+      ctx.fillStyle = W(.1); ctx.fillRect(s.sx - .5, h * .03, 1, h * .4);
+      for (const l of s.lanes) {
+        for (let x = -((t * 9 + l.ph) % l.p); x < w; x += l.p) {
+          const d = Math.abs(x - s.sx), a = d < 4 ? .62 : .2;
+          ctx.fillStyle = W(a); ctx.fillRect(Math.round(x), l.y - 4.5, 1, 9);
+        }
+      }
     }
   },
   /* open source: a commit graph, branches leaving the main line and merging back, one pulse along the line */
@@ -584,12 +634,12 @@ function kick() { if (!raf && !reduced && active.size && !document.hidden) raf =
 document.addEventListener('visibilitychange', () => { if (document.hidden) { cancelAnimationFrame(raf); raf = 0; } else { lastDraw = 0; kick(); } });
 
 const panels = new Map();
-stills.forEach((li, idx) => {
+stills.forEach(li => {
   const cv = li.querySelector('canvas'), scene = SCENES[li.dataset.scene];
   if (!cv || !scene) return;
   const ctx = cv.getContext('2d');
   let w = 0, h = 0, st = null;
-  const k = N - 1 - idx;   /* original oldest-first position, so each scene keeps its look */
+  const k = Math.max(0, ORDER.indexOf(li.dataset.scene));   /* same seed wherever the still sits, so each scene keeps its look */
   const t0 = k * 5.17;
   const p = {
     on: false,
@@ -613,30 +663,33 @@ panels.forEach((p, li) => io.observe(li));
 if ('ResizeObserver' in window) { const ro = new ResizeObserver(() => panels.forEach(p => { if (active.has(p)) p.size(); })); panels.forEach((p, li) => ro.observe(li)); }
 
 /* ---- strip navigation: arrows, counter, keyboard ---- */
-const prev = document.getElementById('jprev'), next = document.getElementById('jnext'), cnt = document.getElementById('jcount');
-const step = () => stills[1] ? stills[1].offsetLeft - stills[0].offsetLeft : stills[0].offsetWidth;
-let queued = false;
-function update() {
-  queued = false;
-  const s = step(), max = reel.scrollWidth - reel.clientWidth;
-  const first = Math.min(N - 1, Math.max(0, Math.round(reel.scrollLeft / s)));
-  const vis = Math.max(1, Math.round((reel.clientWidth + 2) / s));
-  const last = Math.min(N, first + vis);
-  cnt.textContent = vis > 1 ? (first + 1) + ' – ' + last + ' of ' + N : (first + 1) + ' of ' + N;
-  prev.disabled = reel.scrollLeft <= 1; next.disabled = reel.scrollLeft >= max - 1;
-  /* fade whichever edge has a still cut in half: the right one until the end, the left one once there */
-  reel.classList.toggle('fade-r', !next.disabled);
-  reel.classList.toggle('fade-l', next.disabled && !prev.disabled);
-}
-reel.addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(update); } }, { passive: true });
-/* one click moves a whole page of fully visible stills, not just one */
-const go = d => { const s = step(); reel.scrollBy({ left: d * s * Math.max(1, Math.floor((reel.clientWidth + 2) / s)), behavior: reduced ? 'auto' : 'smooth' }); };
-prev.addEventListener('click', () => go(-1));
-next.addEventListener('click', () => go(1));
-reel.addEventListener('keydown', e => { if (e.key === 'ArrowRight') { go(1); e.preventDefault(); } else if (e.key === 'ArrowLeft') { go(-1); e.preventDefault(); } });
-let rz = 0; addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(update, 120); }, { passive: true });
-reel.scrollLeft = 0;   /* newest first, at the left */
-update();
+reels.forEach(reel => {
+  const col = reel.closest('.jcol'), items = Array.from(reel.querySelectorAll('.still')), N = items.length;
+  const prev = col.querySelector('.jbtn--prev'), next = col.querySelector('.jbtn--next'), cnt = col.querySelector('.jcount');
+  const step = () => items[1] ? items[1].offsetLeft - items[0].offsetLeft : items[0].offsetWidth;
+  let queued = false;
+  function update() {
+    queued = false;
+    const s = step(), max = reel.scrollWidth - reel.clientWidth;
+    const first = Math.min(N - 1, Math.max(0, Math.round(reel.scrollLeft / s)));
+    const vis = Math.max(1, Math.round((reel.clientWidth + 2) / s));
+    const last = Math.min(N, first + vis);
+    cnt.textContent = vis > 1 && last > first + 1 ? (first + 1) + ' – ' + last + ' of ' + N : (first + 1) + ' of ' + N;
+    prev.disabled = reel.scrollLeft <= 1; next.disabled = reel.scrollLeft >= max - 1;
+    /* fade whichever edge has a still cut in half: the right one until the end, the left one once there */
+    reel.classList.toggle('fade-r', !next.disabled);
+    reel.classList.toggle('fade-l', next.disabled && !prev.disabled);
+  }
+  reel.addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(update); } }, { passive: true });
+  /* one click moves a whole page of fully visible stills, not just one */
+  const go = d => { const s = step(); reel.scrollBy({ left: d * s * Math.max(1, Math.floor((reel.clientWidth + 2) / s)), behavior: reduced ? 'auto' : 'smooth' }); };
+  prev.addEventListener('click', () => go(-1));
+  next.addEventListener('click', () => go(1));
+  reel.addEventListener('keydown', e => { if (e.key === 'ArrowRight') { go(1); e.preventDefault(); } else if (e.key === 'ArrowLeft') { go(-1); e.preventDefault(); } });
+  let rz = 0; addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(update, 120); }, { passive: true });
+  reel.scrollLeft = 0;   /* newest first, at the left */
+  update();
+});
 })();
 </script>
 <script>
