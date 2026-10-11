@@ -60,8 +60,7 @@
   .card:nth-child(2){animation-delay:.08s}.card:nth-child(3){animation-delay:.16s}
   .card:nth-child(4){animation-delay:.24s}.card:nth-child(5){animation-delay:.32s}
   @keyframes rise{to{opacity:1;transform:none}}
-  .n{font-size:11px;font-weight:500;letter-spacing:.04em;color:var(--faint);font-variant-numeric:tabular-nums}
-  .big{margin:clamp(10px,1.6vh,16px) 0 0;font-family:var(--heading);font-weight:300;font-size:clamp(36px,3.3vw,52px);line-height:1;
+  .big{margin:0;font-family:var(--heading);font-weight:300;font-size:clamp(36px,3.3vw,52px);line-height:1;
     color:var(--accent);font-variant-numeric:tabular-nums;letter-spacing:-.035em;white-space:nowrap}
   .big small{font-size:.38em;margin-left:.2em;letter-spacing:0;font-weight:400}
   .card h2{margin:16px 0 0;font-weight:500;font-size:clamp(16px,1.2vw,18px);line-height:1.3;letter-spacing:-.01em;color:var(--ink)}
@@ -234,50 +233,14 @@
         <button class="jbtn" id="jnext" type="button" aria-label="Later"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9.5 6 6 6-6 6"/></svg></button>
       </div>
     </div>
-    <ol class="reel" id="reel" aria-label="Journey, oldest to newest">
-      <li class="still" tabindex="0" data-scene="medal">
+    <ol class="reel" id="reel" aria-label="Journey, newest to oldest">
+      <li class="still still--now" tabindex="0" data-scene="silicon">
         <canvas class="still__cv" aria-hidden="true"></canvas><div class="still__fade" aria-hidden="true"></div>
         <div class="still__txt">
-          <span class="still__yr">2018 – 2021</span>
-          <b class="still__nm">Gold Medal</b>
-          <span class="still__ro">MS Computational Science &amp; Engineering · NUST</span>
-          <p class="still__fact">Graduated top of the programme with the Gold Medal, CGPA 4.0 / 4.0. Before that, BS Computer Science at the University of Gujrat with the Top Project award.</p>
-        </div>
-      </li>
-      <li class="still" tabindex="0" data-scene="tiles">
-        <canvas class="still__cv" aria-hidden="true"></canvas><div class="still__fade" aria-hidden="true"></div>
-        <div class="still__txt">
-          <span class="still__yr">2020 – 2021</span>
-          <b class="still__nm">CENTAIC (PAF)</b>
-          <span class="still__ro">Machine Learning Engineer · Islamabad · AIRAF</span>
-          <p class="still__fact">AI detection on 450-megapixel satellite images, 95% accurate on objects under 10 pixels, with 80% less analysis time. Mission-critical work under strict security limits.</p>
-        </div>
-      </li>
-      <li class="still" tabindex="0" data-scene="video">
-        <canvas class="still__cv" aria-hidden="true"></canvas><div class="still__fade" aria-hidden="true"></div>
-        <div class="still__txt">
-          <span class="still__yr">2021 – 2024</span>
-          <b class="still__nm">DARVIS</b>
-          <span class="still__ro">Machine Learning Engineer · United States, remote · OmniRoom</span>
-          <p class="still__fact">Real-time video analytics across 100+ cameras, models running in parallel into one decision layer. +50% FPS from custom DeepStream plugins.</p>
-        </div>
-      </li>
-      <li class="still" tabindex="0" data-scene="commits">
-        <canvas class="still__cv" aria-hidden="true"></canvas><div class="still__fade" aria-hidden="true"></div>
-        <div class="still__txt">
-          <span class="still__yr">2022</span>
-          <b class="still__nm"><a href="https://github.com/wang-xinyu/tensorrtx/pulls?q=is%3Apr+author%3Asbmalik" target="_blank" rel="noopener">OpenSource Contribution</a></b>
-          <span class="still__ro">Merged upstream · TensorRTX · PytorchX</span>
-          <p class="still__fact">ArcFace face recognition on TensorRT 8 in TensorRTX (Aug 2022), plus MLP examples in TensorRTX and PytorchX (Jan 2022). PyCon speaker.</p>
-        </div>
-      </li>
-      <li class="still" tabindex="0" data-scene="wire">
-        <canvas class="still__cv" aria-hidden="true"></canvas><div class="still__fade" aria-hidden="true"></div>
-        <div class="still__txt">
-          <span class="still__yr">2023</span>
-          <b class="still__nm"><a href="https://arxiv.org/abs/2303.13055" target="_blank" rel="noopener">Research Paper</a></b>
-          <span class="still__ro">Reimagining UI Design using Deep Learning · arXiv · first author</span>
-          <p class="still__fact">Challenges and opportunities of deep learning for app interface design. ICT Endowment Research &amp; Development Funds award.</p>
+          <span class="still__yr">2024 – now</span>
+          <b class="still__nm">Sigrow</b>
+          <span class="still__ro">Senior Software Engineer, AI/ML · Netherlands · HortiEngine</span>
+          <p class="still__fact">Owns the ML serving and data platform: 20 vision models, 8 million predictions a day, p95 27.2 s → 1.25 s. 2 million messages a day from 5K+ IoT devices.</p>
         </div>
       </li>
       <li class="still" tabindex="0" data-scene="graph">
@@ -289,13 +252,49 @@
           <p class="still__fact">OwlSense social-media intelligence on a multi-agent harness with local LLMs. 23× faster LLM inference; one serving layer for 100K+ requests a day, $50K a year saved.</p>
         </div>
       </li>
-      <li class="still still--now" tabindex="0" data-scene="silicon">
+      <li class="still" tabindex="0" data-scene="wire">
         <canvas class="still__cv" aria-hidden="true"></canvas><div class="still__fade" aria-hidden="true"></div>
         <div class="still__txt">
-          <span class="still__yr">2024 – now</span>
-          <b class="still__nm">Sigrow</b>
-          <span class="still__ro">Senior Software Engineer, AI/ML · Netherlands · HortiEngine</span>
-          <p class="still__fact">Owns the ML serving and data platform: 20 vision models, 8 million predictions a day, p95 27.2 s → 1.25 s. 2 million messages a day from 5K+ IoT devices.</p>
+          <span class="still__yr">2023</span>
+          <b class="still__nm"><a href="https://arxiv.org/abs/2303.13055" target="_blank" rel="noopener">Research Paper</a></b>
+          <span class="still__ro">Reimagining UI Design using Deep Learning · arXiv · first author</span>
+          <p class="still__fact">Challenges and opportunities of deep learning for app interface design. ICT Endowment Research &amp; Development Funds award.</p>
+        </div>
+      </li>
+      <li class="still" tabindex="0" data-scene="commits">
+        <canvas class="still__cv" aria-hidden="true"></canvas><div class="still__fade" aria-hidden="true"></div>
+        <div class="still__txt">
+          <span class="still__yr">2022</span>
+          <b class="still__nm"><a href="https://github.com/wang-xinyu/tensorrtx/pulls?q=is%3Apr+author%3Asbmalik" target="_blank" rel="noopener">OpenSource Contribution</a></b>
+          <span class="still__ro">Merged upstream · TensorRTX · PytorchX</span>
+          <p class="still__fact">ArcFace face recognition on TensorRT 8 in TensorRTX (Aug 2022), plus MLP examples in TensorRTX and PytorchX (Jan 2022). PyCon speaker.</p>
+        </div>
+      </li>
+      <li class="still" tabindex="0" data-scene="video">
+        <canvas class="still__cv" aria-hidden="true"></canvas><div class="still__fade" aria-hidden="true"></div>
+        <div class="still__txt">
+          <span class="still__yr">2021 – 2024</span>
+          <b class="still__nm">DARVIS</b>
+          <span class="still__ro">Machine Learning Engineer · United States, remote · OmniRoom</span>
+          <p class="still__fact">Real-time video analytics across 100+ cameras, models running in parallel into one decision layer. +50% FPS from custom DeepStream plugins.</p>
+        </div>
+      </li>
+      <li class="still" tabindex="0" data-scene="tiles">
+        <canvas class="still__cv" aria-hidden="true"></canvas><div class="still__fade" aria-hidden="true"></div>
+        <div class="still__txt">
+          <span class="still__yr">2020 – 2021</span>
+          <b class="still__nm">CENTAIC (PAF)</b>
+          <span class="still__ro">Machine Learning Engineer · Islamabad · AIRAF</span>
+          <p class="still__fact">AI detection on 450-megapixel satellite images, 95% accurate on objects under 10 pixels, with 80% less analysis time. Mission-critical work under strict security limits.</p>
+        </div>
+      </li>
+      <li class="still" tabindex="0" data-scene="medal">
+        <canvas class="still__cv" aria-hidden="true"></canvas><div class="still__fade" aria-hidden="true"></div>
+        <div class="still__txt">
+          <span class="still__yr">2018 – 2021</span>
+          <b class="still__nm">Gold Medal</b>
+          <span class="still__ro">MS Computational Science &amp; Engineering · NUST</span>
+          <p class="still__fact">Graduated top of the programme with the Gold Medal, CGPA 4.0 / 4.0. Before that, BS Computer Science at the University of Gujrat with the Top Project award.</p>
         </div>
       </li>
     </ol>
@@ -305,31 +304,26 @@
     <h3>Career highlights</h3>
     <ol class="board">
       <li class="card">
-        <span class="n">01</span>
         <div class="big">21.8×</div>
         <h2>Inference optimization</h2>
         <p>Cut p95 latency in production from 27.2 seconds to 1.25.</p>
       </li>
       <li class="card">
-        <span class="n">02</span>
         <div class="big">8 Million</div>
         <h2>Predictions a day</h2>
         <p>20 vision models on shared GPUs, serving 500+ devices in the field.</p>
       </li>
       <li class="card">
-        <span class="n">03</span>
         <div class="big">88%</div>
         <h2>Less GPU memory</h2>
         <p>Cut peak VRAM on the same workload and ended a recurring crash.</p>
       </li>
       <li class="card">
-        <span class="n">04</span>
         <div class="big">$50K</div>
         <h2>Saved every year</h2>
         <p>One shared serving layer for over 3 million requests a month, on far less cloud compute.</p>
       </li>
       <li class="card">
-        <span class="n">05</span>
         <div class="big">450 Million</div>
         <h2>Pixels per image</h2>
         <p>AI detection on satellite images, each the size of 217 Full HD screens.</p>
@@ -576,7 +570,8 @@ stills.forEach((li, idx) => {
   if (!cv || !scene) return;
   const ctx = cv.getContext('2d');
   let w = 0, h = 0, st = null;
-  const t0 = idx * 5.17;
+  const k = N - 1 - idx;   /* original oldest-first position, so each scene keeps its look */
+  const t0 = k * 5.17;
   const p = {
     on: false,
     size() {
@@ -584,7 +579,7 @@ stills.forEach((li, idx) => {
       if (!nw || !nh || (nw === w && nh === h)) return;
       w = nw; h = nh; cv.width = Math.round(w * DPR); cv.height = Math.round(h * DPR);
       ctx.setTransform(DPR, 0, 0, DPR, 0, 0); ctx.lineWidth = 1;
-      st = scene.build(w, h, rng(97 + idx * 131));
+      st = scene.build(w, h, rng(97 + k * 131));
       p.draw(t0, 0);
     },
     draw(t, dt) { if (!st) return; scene.frame(ctx, w, h, t + t0, st, dt); if (!p.on) { p.on = true; cv.classList.add('is-on'); } }
@@ -617,7 +612,7 @@ prev.addEventListener('click', () => go(-1));
 next.addEventListener('click', () => go(1));
 reel.addEventListener('keydown', e => { if (e.key === 'ArrowRight') { go(1); e.preventDefault(); } else if (e.key === 'ArrowLeft') { go(-1); e.preventDefault(); } });
 let rz = 0; addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(update, 120); }, { passive: true });
-reel.scrollLeft = reel.scrollWidth;   /* newest at the right, in view first */
+reel.scrollLeft = 0;   /* newest first, at the left */
 update();
 })();
 </script>
