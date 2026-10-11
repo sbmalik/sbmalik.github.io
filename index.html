@@ -92,16 +92,25 @@
   .jhead{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:8px}
   .jhead h3{margin:0}
   .jnav{display:flex;align-items:center;gap:6px}
-  .jcount{font-size:11px;font-weight:500;letter-spacing:.04em;color:var(--faint);font-variant-numeric:tabular-nums;margin-right:10px;white-space:nowrap}
-  .jbtn{width:26px;height:26px;display:inline-flex;align-items:center;justify-content:center;padding:0;cursor:pointer;
-    border:1px solid var(--rule);border-radius:2px;background:transparent;color:var(--soft);
-    transition:border-color .22s var(--ease),color .22s var(--ease),opacity .22s var(--ease)}
-  .jbtn svg{width:14px;height:14px;display:block}
-  .jbtn:hover,.jbtn:focus-visible{border-color:rgba(255,255,255,.4);color:#fff;outline:none}
-  .jbtn[disabled]{opacity:.28;cursor:default;border-color:var(--rule);color:var(--soft)}
-  .reel{--n:3;--gap:2px;display:flex;gap:var(--gap);margin:0;padding:0;list-style:none;
+  .jcount{font-size:11px;font-weight:500;letter-spacing:.04em;color:var(--faint);font-variant-numeric:tabular-nums;white-space:nowrap}
+  /* carousel arrows sit half outside the strip, centred on its edges, clear of the text; the one with nowhere to go fades out */
+  .reelwrap{position:relative}
+  .jbtn{position:absolute;top:50%;z-index:3;width:36px;height:36px;margin-top:-18px;display:inline-flex;align-items:center;justify-content:center;padding:0;cursor:pointer;
+    border:1px solid rgba(255,255,255,.18);border-radius:50%;background:rgba(10,11,14,.72);color:var(--soft);
+    -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+    transition:border-color .22s var(--ease),color .22s var(--ease),opacity .3s var(--ease),background .22s var(--ease)}
+  .jbtn--prev{left:-18px}.jbtn--next{right:-18px}
+  @media (max-width:759px){.jbtn{display:none}}   /* phones swipe */
+  .jbtn svg{width:16px;height:16px;display:block}
+  .jbtn:hover,.jbtn:focus-visible{border-color:rgba(255,255,255,.5);color:#fff;background:rgba(10,11,14,.88);outline:none}
+  .jbtn[disabled]{opacity:0;pointer-events:none}
+  /* about a third of the next still peeks in and fades out: the cue that the strip scrolls */
+  .reel{--n:3.35;--gap:2px;--fl:0px;--fr:0px;display:flex;gap:var(--gap);margin:0;padding:0;list-style:none;
     overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;
-    scrollbar-width:none;-ms-overflow-style:none}
+    scrollbar-width:none;-ms-overflow-style:none;
+    -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 var(--fl),#000 calc(100% - var(--fr)),transparent 100%);
+            mask-image:linear-gradient(90deg,transparent 0,#000 var(--fl),#000 calc(100% - var(--fr)),transparent 100%)}
+  .reel.fade-r{--fr:clamp(90px,10%,160px)}.reel.fade-l{--fl:clamp(90px,10%,160px)}
   .reel::-webkit-scrollbar{display:none}
   .still{position:relative;flex:0 0 calc((100% - (var(--n) - 1) * var(--gap)) / var(--n));aspect-ratio:2.6/1;max-height:clamp(148px,17.6vh,176px);
     scroll-snap-align:start;overflow:hidden;isolation:isolate;outline:none;cursor:default;
@@ -109,27 +118,35 @@
   .still:focus-visible{box-shadow:inset 0 0 0 1px rgba(255,255,255,.45)}
   .still__cv{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;transition:opacity .9s var(--ease)}
   .still__cv.is-on{opacity:.8}
-  /* hover: the still brightens a little and the fact opens to its full length; the panel itself never changes size */
-  .still:hover .still__cv.is-on,.still:focus-visible .still__cv.is-on,.still:focus-within .still__cv.is-on{opacity:1}
+  /* hover: the fact opens to its full length and the scene steps back behind a deeper shade, so the
+     taller text block always sits on a clean surface; the panel itself never changes size */
+  .still:hover .still__cv.is-on,.still:focus-visible .still__cv.is-on,.still:focus-within .still__cv.is-on{opacity:.38;transition-duration:.45s}
   .still__fade{position:absolute;inset:0;pointer-events:none;
     background:linear-gradient(180deg,rgba(14,15,18,0) 0%,rgba(14,15,18,.1) 28%,rgba(14,15,18,.66) 60%,rgba(14,15,18,.92) 100%)}
+  .still__fade::after{content:"";position:absolute;inset:0;opacity:0;transition:opacity .45s var(--ease);
+    background:linear-gradient(180deg,rgba(14,15,18,.35) 0%,rgba(14,15,18,.8) 30%,rgba(14,15,18,.94) 100%)}
+  .still:hover .still__fade::after,.still:focus-visible .still__fade::after,.still:focus-within .still__fade::after{opacity:1}
   .still__txt{position:absolute;left:0;right:0;bottom:0;z-index:1;padding:12px 18px 12px}
   .still__yr{display:block;font-size:11px;font-weight:500;letter-spacing:.04em;color:var(--faint);font-variant-numeric:tabular-nums}
   .still--now .still__yr{color:var(--accent)}
   .still__nm{display:block;margin-top:3px;font-family:var(--heading);font-weight:300;font-size:clamp(19px,1.55vw,22px);line-height:1.05;letter-spacing:-.03em;color:#fff}
   .still__nm a{color:inherit}
   .still__nm a:hover,.still__nm a:focus-visible{color:var(--accent)}
-  .still__ro{display:block;margin-top:3px;font-size:12px;line-height:1.35;color:var(--dim)}
+  .still__ro a{color:inherit}
+  .still__ro a:hover,.still__ro a:focus-visible{color:var(--accent)}
+  .still__ro{display:block;margin-top:3px;font-size:12px;line-height:1.35;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .still:hover .still__ro,.still:focus-visible .still__ro,.still:focus-within .still__ro{white-space:normal}
   .still__fact{margin:5px 0 0;font-size:12.5px;line-height:1.4;color:var(--soft);
     display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:1;overflow:hidden;
     max-height:1.4em;transition:max-height .5s var(--ease)}
   .still:hover .still__fact,.still:focus-visible .still__fact,.still:focus-within .still__fact{-webkit-line-clamp:3;max-height:4.2em}
-  @media (max-width:1199px){.reel{--n:2}.still{aspect-ratio:2.2/1}}
+  @media (max-width:1199px){.reel{--n:2.35}.still{aspect-ratio:2.2/1}}
   @media (max-width:759px){
     .top{flex-direction:column;align-items:stretch}
     .side{flex-direction:row;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px 20px}
     .who > img{width:60px;height:60px}
     .reel{--n:1;--gap:6px}
+    .reel.fade-r{--fr:36px}.reel.fade-l{--fl:36px}
     .still{flex-basis:86%;aspect-ratio:1.45/1;max-height:none;scroll-snap-align:center}
     .still__txt{padding:12px 14px 12px}
   }
@@ -161,7 +178,7 @@
     .built__k{grid-column:1/-1;justify-self:start;margin-bottom:2px}
     .built__w{zoom:.8}
   }
-  @media print{.jnav{display:none}.reel{overflow:visible;flex-wrap:wrap}.still__fact{max-height:none}}
+  @media print{.jnav,.jbtn{display:none}.reel{overflow:visible;flex-wrap:wrap;-webkit-mask-image:none;mask-image:none}.still__fact{max-height:none}}
   .page{position:relative;z-index:2}
   @media (max-height:860px) and (min-width:760px){.highlights{padding-top:16px;padding-bottom:6px}.card{padding-top:10px;padding-bottom:10px}}
   /* portrait: no frame. The bust stands on the header's hairline, lit by a faint cool halo */
@@ -229,16 +246,17 @@
       <h3>Senior AI/ML Engineer</h3>
       <div class="jnav">
         <span class="jcount" id="jcount" aria-live="polite"></span>
-        <button class="jbtn" id="jprev" type="button" aria-label="Earlier"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m14.5 6-6 6 6 6"/></svg></button>
-        <button class="jbtn" id="jnext" type="button" aria-label="Later"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9.5 6 6 6-6 6"/></svg></button>
       </div>
     </div>
+    <div class="reelwrap">
+      <button class="jbtn jbtn--prev" id="jprev" type="button" aria-label="Newer"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m14.5 6-6 6 6 6"/></svg></button>
+      <button class="jbtn jbtn--next" id="jnext" type="button" aria-label="Older"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9.5 6 6 6-6 6"/></svg></button>
     <ol class="reel" id="reel" aria-label="Journey, newest to oldest">
       <li class="still still--now" tabindex="0" data-scene="silicon">
         <canvas class="still__cv" aria-hidden="true"></canvas><div class="still__fade" aria-hidden="true"></div>
         <div class="still__txt">
           <span class="still__yr">2024 – now</span>
-          <b class="still__nm">Sigrow</b>
+          <b class="still__nm"><a href="https://sigrow.com" target="_blank" rel="noopener">Sigrow</a></b>
           <span class="still__ro">Senior Software Engineer, AI/ML · Netherlands · HortiEngine</span>
           <p class="still__fact">Owns the ML serving and data platform: 20 vision models, 8 million predictions a day, p95 27.2 s → 1.25 s. 2 million messages a day from 5K+ IoT devices.</p>
         </div>
@@ -247,8 +265,8 @@
         <canvas class="still__cv" aria-hidden="true"></canvas><div class="still__fade" aria-hidden="true"></div>
         <div class="still__txt">
           <span class="still__yr">2023 – 2025</span>
-          <b class="still__nm">AI/ML Consultancy</b>
-          <span class="still__ro">AI/ML Consultant · for Rapidev Group &amp; OwlSense</span>
+          <b class="still__nm">AI/ML Consultant</b>
+          <span class="still__ro">For <a href="https://rapidev.com" target="_blank" rel="noopener">Rapidev Group</a> &amp; <a href="https://relymer.com" target="_blank" rel="noopener">Relymer</a></span>
           <p class="still__fact">OwlSense social-media intelligence on a multi-agent harness with local LLMs. 23× faster LLM inference; one serving layer for 100K+ requests a day, $50K a year saved.</p>
         </div>
       </li>
@@ -274,7 +292,7 @@
         <canvas class="still__cv" aria-hidden="true"></canvas><div class="still__fade" aria-hidden="true"></div>
         <div class="still__txt">
           <span class="still__yr">2021 – 2024</span>
-          <b class="still__nm">DARVIS</b>
+          <b class="still__nm"><a href="https://www.darvis.com" target="_blank" rel="noopener">DARVIS</a></b>
           <span class="still__ro">Machine Learning Engineer · United States, remote · OmniRoom</span>
           <p class="still__fact">Real-time video analytics across 100+ cameras, models running in parallel into one decision layer. +50% FPS from custom DeepStream plugins.</p>
         </div>
@@ -283,7 +301,7 @@
         <canvas class="still__cv" aria-hidden="true"></canvas><div class="still__fade" aria-hidden="true"></div>
         <div class="still__txt">
           <span class="still__yr">2020 – 2021</span>
-          <b class="still__nm">CENTAIC (PAF)</b>
+          <b class="still__nm"><a href="https://nastp.gov.pk" target="_blank" rel="noopener">CENTAIC (PAF)</a></b>
           <span class="still__ro">Machine Learning Engineer · Islamabad · AIRAF</span>
           <p class="still__fact">AI detection on 450-megapixel satellite images, 95% accurate on objects under 10 pixels, with 80% less analysis time. Mission-critical work under strict security limits.</p>
         </div>
@@ -292,12 +310,13 @@
         <canvas class="still__cv" aria-hidden="true"></canvas><div class="still__fade" aria-hidden="true"></div>
         <div class="still__txt">
           <span class="still__yr">2018 – 2021</span>
-          <b class="still__nm">Gold Medal</b>
+          <b class="still__nm"><a href="https://www.linkedin.com/feed/update/urn:li:activity:7010624832048427008/" target="_blank" rel="noopener">Gold Medal</a></b>
           <span class="still__ro">MS Computational Science &amp; Engineering · NUST</span>
           <p class="still__fact">Graduated top of the programme with the Gold Medal, CGPA 4.0 / 4.0. Before that, BS Computer Science at the University of Gujrat with the Top Project award.</p>
         </div>
       </li>
     </ol>
+    </div>
   </section>
 
   <section class="highlights" id="work" aria-label="Career highlights">
@@ -605,9 +624,13 @@ function update() {
   const last = Math.min(N, first + vis);
   cnt.textContent = vis > 1 ? (first + 1) + ' – ' + last + ' of ' + N : (first + 1) + ' of ' + N;
   prev.disabled = reel.scrollLeft <= 1; next.disabled = reel.scrollLeft >= max - 1;
+  /* fade whichever edge has a still cut in half: the right one until the end, the left one once there */
+  reel.classList.toggle('fade-r', !next.disabled);
+  reel.classList.toggle('fade-l', next.disabled && !prev.disabled);
 }
 reel.addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(update); } }, { passive: true });
-const go = d => reel.scrollBy({ left: d * step(), behavior: reduced ? 'auto' : 'smooth' });
+/* one click moves a whole page of fully visible stills, not just one */
+const go = d => { const s = step(); reel.scrollBy({ left: d * s * Math.max(1, Math.floor((reel.clientWidth + 2) / s)), behavior: reduced ? 'auto' : 'smooth' }); };
 prev.addEventListener('click', () => go(-1));
 next.addEventListener('click', () => go(1));
 reel.addEventListener('keydown', e => { if (e.key === 'ArrowRight') { go(1); e.preventDefault(); } else if (e.key === 'ArrowLeft') { go(-1); e.preventDefault(); } });
