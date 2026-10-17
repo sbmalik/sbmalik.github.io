@@ -90,19 +90,34 @@
   /* journey: a strip of film stills, newest at the right */
   .journey{padding:clamp(14px,2vh,18px) 0 clamp(16px,2.2vh,20px);border-bottom:1px solid var(--rule)}
   .jtitle{margin:0 0 10px}
-  /* two strips side by side: work experience (three across) and other achievements (one across), same still size */
+  /* two strips side by side: work experience and other achievements, every still the same size */
   .jgrid{display:grid;grid-template-columns:3fr 1fr;gap:0 48px}
   .jcol{min-width:0}
   .jhead{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:8px}
   .jlab{font-size:11px;font-weight:500;letter-spacing:.04em;color:var(--dim)}
   @media (min-width:1200px){
-    /* exactly three stills (and one) at a time, with clear gaps; no half-cut still, so no edge fade */
+    /* two whole stills and half of the third on the left, one whole and half of the next on the right; the half
+       still fades out under its arrow, the cue to click. Right-hand stills are --ko times as wide as left-hand
+       ones (c): the row is 48px + 2.5c + 2 gaps + 1.5 * ko * c + 1 gap, which fixes the right column's width */
     .journey .reel{--gap:12px}
-    .jgrid{grid-template-columns:minmax(0,1fr) calc((100% - 48px - 24px) / 4)}   /* right column = one still, so all four stills match */
-    .jcol--work .reel{--n:3}
-    .jcol--other .reel{--n:1}
-    .journey .reel.fade-r,.journey .reel.fade-l{--fr:0px;--fl:0px}
-    .journey .still{aspect-ratio:auto;height:clamp(148px,17.6vh,176px)}
+    .jgrid{--ko:.75;grid-template-columns:minmax(0,1fr) calc((100% - 84px) * 1.5 * var(--ko) / (2.5 + 1.5 * var(--ko)) + 12px)}
+    .jcol--other .still__nm{font-size:clamp(17px,1.35vw,20px)}
+    .jcol--work .still{flex-basis:calc((100% - 2 * var(--gap)) / 2.5)}
+    .jcol--other .still{flex-basis:calc((100% - var(--gap)) / 1.5)}
+    .jcol--work .reel.fade-r{--fr:calc((100% - 2 * var(--gap)) / 5)}.jcol--work .reel.fade-l{--fl:calc((100% - 2 * var(--gap)) / 5)}
+    .jcol--other .reel.fade-r{--fr:calc((100% - var(--gap)) / 3)}.jcol--other .reel.fade-l{--fl:calc((100% - var(--gap)) / 3)}
+    .journey .still{aspect-ratio:auto;max-height:none;height:clamp(148px,17.6vh,176px)}
+    /* the work strip's next arrow sits just inside its strip, over the faded still, so it keeps clear of the other strip's back arrow */
+    .jcol--work .jbtn--next{right:8px}
+  }
+  /* screens with the room get taller stills, so a full hover fits: year, title, 2-line role, 4-line fact */
+  @media (min-width:1200px) and (min-height:760px){
+    .journey .still{height:clamp(172px,21vh,196px)}
+  }
+  /* short screens keep the compact stills and a shorter hover: 1-line role, 3-line fact */
+  @media (min-width:1200px) and (max-height:759px){
+    .journey .still:hover .still__ro,.journey .still:focus-visible .still__ro,.journey .still:has(:focus-visible) .still__ro{-webkit-line-clamp:1}
+    .journey .still:hover .still__fact,.journey .still:focus-visible .still__fact,.journey .still:has(:focus-visible) .still__fact{-webkit-line-clamp:3;max-height:4.2em}
   }
   @media (max-width:1199px){.jgrid{grid-template-columns:1fr;gap:18px}}
   .jcount{font-size:11px;font-weight:500;letter-spacing:.04em;color:var(--faint);font-variant-numeric:tabular-nums;white-space:nowrap}
@@ -148,11 +163,11 @@
   .still__ro a{color:inherit}
   .still__ro a:hover,.still__ro a:focus-visible{color:var(--accent)}
   .still__ro{display:block;margin-top:3px;font-size:12px;line-height:1.35;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .still:hover .still__ro,.still:focus-visible .still__ro,.still:has(:focus-visible) .still__ro{white-space:normal}
+  .still:hover .still__ro,.still:focus-visible .still__ro,.still:has(:focus-visible) .still__ro{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;white-space:normal}
   .still__fact{margin:5px 0 0;font-size:12.5px;line-height:1.4;color:var(--soft);
     display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:1;overflow:hidden;
     max-height:1.4em;transition:max-height .5s var(--ease)}
-  .still:hover .still__fact,.still:focus-visible .still__fact,.still:has(:focus-visible) .still__fact{-webkit-line-clamp:3;max-height:4.2em}
+  .still:hover .still__fact,.still:focus-visible .still__fact,.still:has(:focus-visible) .still__fact{-webkit-line-clamp:4;max-height:5.6em}
   @media (max-width:1199px){.reel{--n:2.35}.still{aspect-ratio:2.2/1}}
   @media (max-width:759px){
     .top{flex-direction:column;align-items:stretch}
@@ -323,7 +338,7 @@
           <span class="still__yr">2023</span>
           <b class="still__nm"><a href="https://arxiv.org/abs/2303.13055" target="_blank" rel="noopener">Research Paper</a></b>
           <span class="still__ro">Reimagining UI Design using Deep Learning · arXiv · first author</span>
-          <p class="still__fact">Challenges and opportunities of deep learning for app interface design. ICT Endowment Research &amp; Development Funds award.</p>
+          <p class="still__fact">Challenges and opportunities of deep learning for app interfaces. ICT Endowment R&amp;D Funds award.</p>
         </div>
       </li>
       <li class="still" tabindex="0" data-scene="commits">
@@ -332,7 +347,7 @@
           <span class="still__yr">2022</span>
           <b class="still__nm"><a href="https://github.com/wang-xinyu/tensorrtx/pulls?q=is%3Apr+author%3Asbmalik" target="_blank" rel="noopener">OpenSource Contribution</a></b>
           <span class="still__ro">Merged upstream · TensorRTX · PytorchX</span>
-          <p class="still__fact">ArcFace face recognition on TensorRT 8 in TensorRTX (Aug 2022), plus MLP examples in TensorRTX and PytorchX (Jan 2022).</p>
+          <p class="still__fact">ArcFace face recognition on TensorRT 8 (Aug 2022), plus MLP examples (Jan 2022).</p>
         </div>
       </li>
       <li class="still" tabindex="0" data-scene="medal">
@@ -341,7 +356,7 @@
           <span class="still__yr">2018 – 2021</span>
           <b class="still__nm"><a href="https://www.linkedin.com/feed/update/urn:li:activity:7010624832048427008/" target="_blank" rel="noopener">Gold Medal</a></b>
           <span class="still__ro">MS Computational Science &amp; Engineering · NUST</span>
-          <p class="still__fact">Graduated top of the programme with the Gold Medal, CGPA 4.0 / 4.0. Before that, BS Computer Science at the University of Gujrat with the Top Project award.</p>
+          <p class="still__fact">Top of the programme, CGPA 4.0 / 4.0. BS Computer Science at the University of Gujrat, Top Project award.</p>
         </div>
       </li>
       </ol>
@@ -667,12 +682,14 @@ reels.forEach(reel => {
   const col = reel.closest('.jcol'), items = Array.from(reel.querySelectorAll('.still')), N = items.length;
   const prev = col.querySelector('.jbtn--prev'), next = col.querySelector('.jbtn--next'), cnt = col.querySelector('.jcount');
   const step = () => items[1] ? items[1].offsetLeft - items[0].offsetLeft : items[0].offsetWidth;
+  const whole = s => Math.max(1, Math.floor((reel.clientWidth + s - items[0].offsetWidth + 2) / s));
   let queued = false;
   function update() {
     queued = false;
     const s = step(), max = reel.scrollWidth - reel.clientWidth;
-    const first = Math.min(N - 1, Math.max(0, Math.round(reel.scrollLeft / s)));
-    const vis = Math.max(1, Math.round((reel.clientWidth + 2) / s));
+    /* count only stills fully in view; a half-cut one is the hint, not a page */
+    const first = Math.min(N - 1, Math.max(0, Math.ceil(reel.scrollLeft / s - .05)));
+    const vis = whole(s);
     const last = Math.min(N, first + vis);
     cnt.textContent = vis > 1 && last > first + 1 ? (first + 1) + ' – ' + last + ' of ' + N : (first + 1) + ' of ' + N;
     prev.disabled = reel.scrollLeft <= 1; next.disabled = reel.scrollLeft >= max - 1;
@@ -682,7 +699,7 @@ reels.forEach(reel => {
   }
   reel.addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(update); } }, { passive: true });
   /* one click moves a whole page of fully visible stills, not just one */
-  const go = d => { const s = step(); reel.scrollBy({ left: d * s * Math.max(1, Math.floor((reel.clientWidth + 2) / s)), behavior: reduced ? 'auto' : 'smooth' }); };
+  const go = d => { const s = step(); reel.scrollBy({ left: d * s * whole(s), behavior: reduced ? 'auto' : 'smooth' }); };
   prev.addEventListener('click', () => go(-1));
   next.addEventListener('click', () => go(1));
   reel.addEventListener('keydown', e => { if (e.key === 'ArrowRight') { go(1); e.preventDefault(); } else if (e.key === 'ArrowLeft') { go(-1); e.preventDefault(); } });
