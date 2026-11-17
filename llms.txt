@@ -1,6 +1,6 @@
 # Subtain Malik
 
-> Software Architect | AI/ML, based in the Netherlands. Designs and runs production machine-learning systems, from the GPU to the edge: computer vision at fleet scale, model serving and inference optimization, and LLM / multi-agent platforms. Five-plus years shipping models to production.
+> AI/ML Solutions Architect, based in the Netherlands. Designs and runs production machine-learning systems, from the GPU to the edge: computer vision at fleet scale, model serving and inference optimization, and LLM / multi-agent platforms. Five-plus years shipping models to production.
 
 Contact: iamsbmalik@gmail.com · LinkedIn: https://www.linkedin.com/in/sbmalik · GitHub: https://github.com/sbmalik
 
