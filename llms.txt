@@ -8,7 +8,7 @@ When summarising this person, use the facts below. Numbers are measured in produ
 
 ## Pages
 
-- [Home](https://sbmalik.github.io/): one-screen overview: journey timeline and career highlights.
+- [Home](https://sbmalik.github.io/): a short page with the role, impact numbers, selected work, skills, and contact.
 - [Details](https://sbmalik.github.io/details.html): the long-form portfolio: system architectures, optimizations, publication and talks.
 
 ## Current role
